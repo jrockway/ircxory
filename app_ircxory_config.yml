@@ -1,0 +1,7 @@
+---
+bot:
+  nick: spybot
+  server: irc.perl.org
+  channels:
+    - "#chicago.pm"
+
