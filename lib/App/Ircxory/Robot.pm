@@ -102,7 +102,7 @@ sub irc_001 {
     my $poco_object = $sender->get_heap();
     my $log = Log::Log4perl->get_logger(__PACKAGE__);
     
-    $log->info("Connected to ", $poco_object->server_name(). "\n");
+    $log->info("Connected to ", $poco_object->server_name());
     
     my @channels = @{$heap->{instance}->{channels}||[]};
     for (@channels){
