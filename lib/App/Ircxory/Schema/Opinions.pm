@@ -24,8 +24,8 @@ __PACKAGE__->add_columns(
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
 __PACKAGE__->set_primary_key("oid");
-__PACKAGE__->belongs_to("nid", "App::Ircxory::Schema::Nicknames", { nid => "nid" });
-__PACKAGE__->belongs_to("tid", "App::Ircxory::Schema::Things", { tid => "tid" });
+__PACKAGE__->belongs_to("nickname", "App::Ircxory::Schema::Nicknames", { nid => "nid" });
+__PACKAGE__->belongs_to("thing", "App::Ircxory::Schema::Things", { tid => "tid" });
 
 1;
 

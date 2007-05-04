@@ -25,7 +25,7 @@ __PACKAGE__->has_many(
   "App::Ircxory::Schema::Opinions",
   { "foreign.nid" => "self.nid" },
 );
-__PACKAGE__->belongs_to("pid", "App::Ircxory::Schema::People", { pid => "pid" });
+__PACKAGE__->belongs_to("person", "App::Ircxory::Schema::People", { pid => "pid" });
 
 1;
 
