@@ -114,12 +114,15 @@ sub irc_001 {
 sub irc_public {
     my ($kernel,$sender,$who,$where,$what) = @_[KERNEL,SENDER,ARG0,ARG1,ARG2];
     warn "$who said $what on $where!";
+    if ($who =~ /jrockway/ && $what =~ /go away/) {
+        $kernel->post($sender => 'shutdown');
+    }
 }
 
 sub _default {
-    #my ($event, $args) = @_[ARG0 .. $#_];
+    my ($event, $args) = @_[ARG0 .. $#_];
     #my @output = ( "$event: " );
-   # 
+    # 
     #foreach my $arg ( @$args ) {
     #    if ( ref($arg) eq 'ARRAY' ) {
     #        push( @output, "[" . join(" ,", @$arg ) . "]" );
@@ -128,7 +131,7 @@ sub _default {
     #    }
     #}
     #print STDOUT join ' ', @output, "\n";
-    #return 0;
+    return 0;
 }
 
 1;
