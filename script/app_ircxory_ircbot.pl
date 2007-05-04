@@ -9,6 +9,7 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
 use App::Ircxory::Robot;
+use App::Ircxory::Robot::Action;
 use Log::Log4perl;
 
 # setup log4perl
@@ -35,7 +36,7 @@ die "The config file $configfile needs a 'bot' section"
 $log->debug("Loading bot");
 my $bot;
 eval {
-    $bot = App::Ircxory::Robot->new({%{$config->{bot}}, callback => sub{}});
+    $bot = App::Ircxory::Robot->new({%{$config->{bot}}, callback => \&show});
 };
 if ($@) {
     $log->error("Error creating ircbot: $@");
@@ -49,3 +50,8 @@ $bot->go;
 # we're done, exit
 $log->debug("Bot exiting");
 exit 0;
+
+sub show {
+    my $action = shift;
+    $log->debug("Got an action: ". Dump($action));
+}
