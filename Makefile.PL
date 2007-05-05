@@ -12,8 +12,8 @@ requires 'Class::Accessor';
 requires 'Regexp::Common::balanced';
 requires 'YAML';
 requires 'Exporter';
+requires 'Readonly';
 
-build_requires 'Readonly';
 build_requires 'Test::More';
 
 auto_install;

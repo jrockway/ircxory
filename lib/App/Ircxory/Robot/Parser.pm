@@ -7,7 +7,14 @@ use warnings;
 use base 'Exporter';
 our @EXPORT = qw(parse parse_nickname);
 
+use Regexp::Common qw/balanced/;
 use Log::Log4perl;
+use Readonly;
+Readonly my %OP_POINTS => ( '++' => 1,
+                            '--' => -1,
+                            '-+' => 0,
+                            '+-' => 0,
+                          );
 
 =head1 NAME
 
@@ -44,7 +51,7 @@ sub parse {
         }
         
         if ($what =~ /^\w+: join (#.+)$/) {
-            $log->debug("$who asked us to part $1");
+            $log->debug("$who asked us to join $1");
             return ('join', $1);
         }
 
@@ -54,6 +61,47 @@ sub parse {
         }
     }
 
+    my $parens =  $RE{balanced}{-parens=>'(){}[]<>'}{-keep};
+    if ($what =~ /(?: # what we're voting on
+                      $parens        # something in parens
+                      |
+                      ([A-Za-z_:]+)  # a single word++
+                  )
+                  ([+-]{2})          # the operation (inc or dec)
+                  \s*                # spaces, who cares
+                  (?:[#] \s* (.+))?  # and an optional reason
+                  $/x
+       )
+      {
+          my $paren  = $1;
+          my $word   = $2;
+          if (defined $paren) {
+              $paren =~ s/^[({[<]//;
+              $paren =~ s/[)}\]>]$//;
+              $word = $paren;
+          }
+
+          my $op     = $3;
+          my $reason = $4;
+          $reason = '' if !defined $reason; # fix in perl5.10 //
+
+          # trim
+          $word   =~ s/^\s+//;
+          $word   =~ s/\s+$//;
+          $reason =~ s/^\s+//;
+          $reason =~ s/\s+$//;
+          
+          # and finally return
+          return App::Ircxory::Robot::Action->
+            new({
+                 who     => $who,
+                 word    => lc $word,
+                 reason  => lc $reason,
+                 points  => $OP_POINTS{$op} || 0,
+                 channel => $where,
+                });
+      }
+    
     return;
 }
 

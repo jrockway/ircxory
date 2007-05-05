@@ -7,6 +7,7 @@ use Test::More;
 use App::Ircxory::Robot::Action;
 use App::Ircxory::Robot::Parser;
 use Readonly;
+use Data::Dumper;
 
 use Log::Log4perl qw(:easy);
 Log::Log4perl->easy_init($FATAL);
@@ -79,23 +80,49 @@ while (my ($k, $v) = each %COMMANDS) {
 while (my ($k, $v) = each %OPINIONS) {
     my $got = parse($USER, $k, $CHANNEL);
     my $exp = $v;
-    ok(compare($got, $exp), "$k parsed to the correct action");
+    
+    is_same($got, $exp, "$k parsed to the correct action");
 }
 
-sub compare {
-    return 0 unless defined $_[0] && definted $_[1];
-    my %g = %{$_[0]};
-    my %x = %{$_[1]};
-    
-    foreach (keys %g, keys %x) {
-        return 0 unless $g{$_} eq $x{$_};
+sub is_same {
+    no warnings 'uninitialized';
+    my $got      = shift;
+    my $expected = shift;
+    my $message  = shift;
+
+    # undef == undef
+    if (!defined $got && !defined $expected) {
+        pass($message);
+        return;
+    }
+
+    # something undef? not good.
+    unless (defined $got && defined $expected){
+        fail($message);
+        diag("dump: ". Dumper(defined $got ? $got : $expected));
+        return;
     }
     
-    return 1;
+    # compare two hashes
+    my %g = %$got;
+    my %x = %$expected;
+    
+    foreach (keys %g, keys %x) { # make sure one hash doesn't have an extra key
+        if ($g{$_} ne $x{$_}){
+            fail($message);
+            diag("Compare failed on key '$_'");
+            diag("      got: ". $g{$_});
+            diag(" expected: ". $x{$_});
+            return;
+        }
+    }
+    
+    # didn't fail in there? pass.
+    pass($message);
+    return;
 }
 
 sub mk_action {
-    my $who    = shift;
     my $word   = shift;
     my $reason = shift;
     my $points = shift;

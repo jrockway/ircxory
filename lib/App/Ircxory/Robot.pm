@@ -8,8 +8,9 @@ use Carp;
 use Log::Log4perl;
 use POE qw(Component::IRC);
 use POE::Kernel;
-use Regexp::Common qw/balanced/;
 use App::Ircxory::Robot::Action;
+use App::Ircxory::Robot::Parser;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -149,10 +150,20 @@ sub irc_001 {
 sub irc_public {
     my ($kernel,$sender,$heap,$who,$where,$what) = 
       @_[KERNEL,SENDER,HEAP,ARG0,ARG1,ARG2];
-    if ($who =~ /jrockway/ && $what =~ /go away/) {
-        $kernel->post($sender => 'shutdown');
+
+    my $log = Log::Log4perl->get_logger('App::Ircxory::Robot');
+
+    my @result = parse($who, $what, $where);
+    my $first = $result[0];
+    if (defined $first && ref $first eq 'App::Ircxory::Robot::Action') {
+        $log->debug('logging an opinion: '. Dumper($first));
+        $heap->{instance}->{callback}->($first);
+        return;
     }
-    $heap->{instance}->_parse_message($what, $who, $where);
+
+    if (@result) {
+        $kernel->post($sender => @result);
+    }
 }
 
 sub _default {
@@ -168,38 +179,6 @@ sub _default {
     #}
     #print STDOUT join ' ', @output, "\n";
     return 0;
-}
-
-sub _parse_message {
-    my $self    = shift;
-    my $message = shift;
-    my $who     = shift;
-    my $where   = shift;
-
-    my $call    = $self->{callback};
-
-    if ($message =~ /^ (.+)             # what we're voting on, possibly
-                     ([+]{2}|[-]{2})    # the operation (inc or dec)
-                     \s*                # spaces, who cares
-                     (?:[#] \s* (.+))?  # and an optional reason
-                     $/x
-       )
-      {
-          my $vote   = $1;
-          my $op     = $2;
-          my $reason = $3;
-
-          my $action = App::Ircxory::Robot::Action->
-            new({ nick    => $who, # TODO nick parser
-                  channel => $where,  
-                  word    => $vote, # TODO
-                  points  => ($op eq '++' ? 1 : -1),
-                  reason  => $reason,
-                });
-          $call->($action);
-      }
-    
-    return;
 }
 
 1;
