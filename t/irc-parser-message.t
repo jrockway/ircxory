@@ -118,6 +118,8 @@ sub is_same {
             diag(" expected: ". $x{$_});
             return;
         }
+        $got->      $_; # make sure accessors work too
+        $expected-> $_; 
     }
     
     # didn't fail in there? pass.
