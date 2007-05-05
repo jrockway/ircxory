@@ -99,6 +99,7 @@ sub parse {
                  reason  => lc $reason,
                  points  => $OP_POINTS{$op} || 0,
                  channel => $where,
+                 message => $what,
                 });
       }
     
