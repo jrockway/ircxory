@@ -13,7 +13,7 @@ __PACKAGE__->add_columns(
   "nid",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
   "pid",
-  { data_type => "INTEGER", is_nullable => 0, size => undef },
+  { data_type => "INTEGER", is_nullable => 1, size => undef },
   "nick",
   { data_type => "TEXT", is_nullable => 0, size => undef },
   "username",
