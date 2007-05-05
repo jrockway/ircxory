@@ -10,6 +10,7 @@ use lib "$Bin/../lib";
 
 use App::Ircxory::Robot;
 use App::Ircxory::Robot::Action;
+use App::Ircxory::Config;
 use Log::Log4perl;
 
 # setup log4perl
@@ -18,18 +19,17 @@ Log::Log4perl->init($logconfig);
 my $log = Log::Log4perl->get_logger('App::Ircxory::Robot');
 
 # load app config file
-my $configfile = "$Bin/../app_ircxory_config.yml";
-$log->debug("Loading config file $configfile");
+$log->debug("Loading config file");
 my $config;
 eval {
-    $config = YAML::LoadFile($configfile);
+    $config = App::Ircxory::Config->load;
 };
 if ($@) {
     $log->error("Error loading config file: $@");
     die;
 }
 
-die "The config file $configfile needs a 'bot' section" 
+die "The config file needs a 'bot' section" 
   unless ref $config->{bot};
 
 # load the bot
