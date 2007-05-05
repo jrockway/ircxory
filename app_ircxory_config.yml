@@ -4,4 +4,5 @@ bot:
   server: irc.perl.org
   channels:
     - "#chicago.pm"
-
+Model::DBIC:
+  - "DBI:SQLite:root/database"
