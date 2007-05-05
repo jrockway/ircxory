@@ -10,6 +10,7 @@ use lib "$Bin/../lib";
 
 use App::Ircxory::Robot;
 use App::Ircxory::Robot::Action;
+use App::Ircxory::Robot::DBLogger;
 use App::Ircxory::Config;
 use Log::Log4perl;
 
@@ -32,11 +33,18 @@ if ($@) {
 die "The config file needs a 'bot' section" 
   unless ref $config->{bot};
 
+# connect to the database
+$log->debug("Connecting to the database");
+my $recorder = App::Ircxory::Robot::DBLogger->connect;
+
 # load the bot
 $log->debug("Loading bot");
 my $bot;
 eval {
-    $bot = App::Ircxory::Robot->new({%{$config->{bot}}, callback => \&show});
+    $bot = App::Ircxory::Robot->new({
+                                     %{$config->{bot}}, 
+                                     callback => $recorder->get_recorder
+                                    });
 };
 if ($@) {
     $log->error("Error creating ircbot: $@");
@@ -50,8 +58,3 @@ $bot->go;
 # we're done, exit
 $log->debug("Bot exiting");
 exit 0;
-
-sub show {
-    my $action = shift;
-    $log->debug("Got an action: ". Dump($action));
-}
