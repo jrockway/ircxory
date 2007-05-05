@@ -52,6 +52,9 @@ sub record {
     my $nickname = $self->get_nickname(parse_nickname($action->who));
     my $thing    = $self->resultset('Things')->
       find_or_create({ thing => $action->word });
+
+    my $channel  = $self->resultset('Channels')->
+      find_or_create({ channel => $action->channel });
     
     return $self->resultset('Opinions')->
       create({ nickname  => $nickname,
@@ -59,6 +62,7 @@ sub record {
                points    => $action->points,
                message   => $action->message,
                reason    => $action->reason,
+               channel   => $channel,
              });
 }
 

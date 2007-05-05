@@ -14,18 +14,21 @@ __PACKAGE__->add_columns(
   { data_type => "INTEGER", is_nullable => 0, size => undef },
   "nid",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
-  "message",
-  { data_type => "TEXT", is_nullable => 0, size => undef },
-  "points",
+  "cid",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
   "tid",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
+  "message",
+  { data_type => "TEXT", is_nullable => 0, size => undef },
   "reason",
   { data_type => "TEXT", is_nullable => 0, size => undef },
+  "points",
+  { data_type => "INTEGER", is_nullable => 0, size => undef },
 );
 __PACKAGE__->set_primary_key("oid");
 __PACKAGE__->belongs_to("nickname", "App::Ircxory::Schema::Nicknames", { nid => "nid" });
 __PACKAGE__->belongs_to("thing", "App::Ircxory::Schema::Things", { tid => "tid" });
+__PACKAGE__->belongs_to("channel", "App::Ircxory::Schema::Channels", { cid => "cid" });
 
 1;
 

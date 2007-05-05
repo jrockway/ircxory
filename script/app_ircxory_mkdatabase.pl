@@ -25,12 +25,16 @@ my $nick    = rs('Nicknames')-> create({ person   => $person,
 # thing
 my $thing   = rs('Things')->    create({ thing    => 'perl' });
 
+# channel
+my $channel = rs('Channels')->  create({ channel  => '#perl'});
+
 # opinions match nicks to opinions on things
 my $opinion = rs('Opinions')->  create({ nickname => $nick,
                                          thing    => $thing,
                                          message  => 'perl++ # perl rules',
                                          reason   => 'perl rules',
                                          points   => 1,
+                                         channel  => $channel,
                                        });
 
 print "Created first opinion with id ". $opinion->id. "\n";

@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Directory::Scratch;
 use App::Ircxory::Schema;
 use App::Ircxory::Robot::DBLogger;
@@ -48,4 +48,5 @@ my $opinion = $schema->record($action);
 
 ok($opinion, 'inserted opinion record ok');
 is($opinion->nickname->person->pid, $person->pid, "opinion person is the same");
+is($opinion->channel, '#plusplus');
 is($opinion->thing->thing, 'plusplus');
