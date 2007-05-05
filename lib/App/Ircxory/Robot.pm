@@ -42,6 +42,39 @@ callback sub gets a
 L<App::Ircxory::Robot::Action|App::Ircxory::Robot::Action> object with
 info about the action.
 
+=head1 METHODS
+
+=head2 new({server => 'irc.perl.org', ...});
+
+Create a new IRC bot.  Required args are C<nick>, C<server>,
+C<channels> (and arrayref), and C<callback>.  C<callback> is a coderef
+that is called with a App::Ircxory::Robot::Action when the bot detects
+some relevant activity.
+
+=head2 go
+
+Start the bot.  Returns when the bot is asked to quit.
+
+=head1 INTERNAL METHODS
+
+These are for POE.
+
+=head2 irc_001
+
+Init connection.
+
+=head2 irc_public
+
+Recieve a public message (in a channel), parse it, and call the
+callback if necessary.
+
+=head2 _default
+
+Nothing really.
+
+=head2 _start
+
+Start the IRC bot.
 
 =cut
 
