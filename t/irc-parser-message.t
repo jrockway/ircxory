@@ -106,6 +106,9 @@ sub is_same {
     # compare two hashes
     my %g = %$got;
     my %x = %$expected;
+
+    delete $g{message}; # we don't care about this really
+    delete $x{message}; 
     
     foreach (keys %g, keys %x) { # make sure one hash doesn't have an extra key
         if ($g{$_} ne $x{$_}){
