@@ -11,9 +11,10 @@ requires 'Log::Log4perl';
 requires 'Class::Accessor';
 requires 'Regexp::Common::balanced';
 requires 'YAML';
+requires 'Exporter';
 
+build_requires 'Readonly';
 build_requires 'Test::More';
 
 auto_install;
-
 WriteAll;
