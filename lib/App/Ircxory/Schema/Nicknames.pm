@@ -22,6 +22,9 @@ __PACKAGE__->add_columns(
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
 __PACKAGE__->set_primary_key("nid");
+__PACKAGE__->add_unique_constraint(
+  hostmask => [qw/nick username host/]
+);                                   
 __PACKAGE__->has_many(
   "opinions",
   "App::Ircxory::Schema::Opinions",

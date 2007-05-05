@@ -16,6 +16,9 @@ __PACKAGE__->add_columns(
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
 __PACKAGE__->set_primary_key("tid");
+__PACKAGE__->add_unique_constraint(
+  thing => [qw/thing/]
+);                                   
 __PACKAGE__->has_many(
   "opinions",
   "App::Ircxory::Schema::Opinions",

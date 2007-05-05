@@ -16,6 +16,9 @@ __PACKAGE__->add_columns(
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
 __PACKAGE__->set_primary_key("pid");
+__PACKAGE__->add_unique_constraint(
+  nickname => [qw/name/]
+);                                   
 __PACKAGE__->has_many(
   "nicknames",
   "App::Ircxory::Schema::Nicknames",
