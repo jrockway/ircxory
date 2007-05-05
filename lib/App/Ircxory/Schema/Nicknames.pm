@@ -16,7 +16,9 @@ __PACKAGE__->add_columns(
   { data_type => "INTEGER", is_nullable => 0, size => undef },
   "nick",
   { data_type => "TEXT", is_nullable => 0, size => undef },
-  "hostmask",
+  "username",
+  { data_type => "TEXT", is_nullable => 0, size => undef },
+  "host",
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
 __PACKAGE__->set_primary_key("nid");

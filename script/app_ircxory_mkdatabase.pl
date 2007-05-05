@@ -18,7 +18,8 @@ my $person  = rs('People')->    create({ name     => 'jrockway' });
 # person has_many nicks
 my $nick    = rs('Nicknames')-> create({ person   => $person,
                                          nick     => 'jrockway',
-                                         hostmask => 'jrockway@foo',
+                                         username => 'jrockway',
+                                         host     => 'dsl-12-34-56-78.blah',
                                        });
 
 # thing
