@@ -69,7 +69,13 @@ my %OPINIONS = (
                 'this is totally irrelevant' => undef,
                );
                 
-plan tests => (scalar keys %COMMANDS) + (scalar keys %OPINIONS);
+# the +1 is for testing channel name escaping in regexes (bug #1, heh)
+plan tests => (scalar keys %COMMANDS) + (scalar keys %OPINIONS) + 1;
+
+{
+    my $got = [(parse($ADMIN_USER, 'foobot: part #perl++', '#perl++'))];
+    is_deeply($got, ['part', '#perl++'], 'part #perl++ works');
+}
 
 while (my ($k, $v) = each %COMMANDS) {
     my $got = [(parse($ADMIN_USER, $k, $CHANNEL))];

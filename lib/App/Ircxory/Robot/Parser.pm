@@ -45,8 +45,9 @@ sub parse {
 
     # respond to an admin command
     if ($nick eq 'jrockway') { # yay
-        if ($what =~ /^\w+: part $where$/) {
-            $log->debug("$who asked us to part $where");
+        my $chan = quotemeta $where;
+        if ($what =~ /^\w+: part $chan$/) {
+            $log->debug("$who asked us to part $chan");
             return ('part', $where);
         }
         
