@@ -4,5 +4,12 @@ bot:
   server: irc.perl.org
   channels:
     - "#chicago.pm"
+    - "#catalyst"
+    - "#catalyst-dev"
+    - "#perl"
+    - "#perl++"
+    - "#killtrac"
+    - "#dbix-class"
+    - "#angerwhale"
 Model::DBIC:
   - "DBI:SQLite:root/database"
