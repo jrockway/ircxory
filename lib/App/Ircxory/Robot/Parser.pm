@@ -66,12 +66,12 @@ sub parse {
     if ($what =~ /(?: # what we're voting on
                       $parens        # something in parens
                       |
-                      ([A-Za-z_:]+)  # a single word++
+                      ([A-Za-z_:0-9]+)  # a single word++
                   )
                   ([+-]{2})          # the operation (inc or dec)
                   \s*                # spaces, who cares
-                  (?:[#] \s* (.+))?  # and an optional reason
-                  $/x
+                  (?:[#] \s* (.+)$)?  # and an optional reason
+                 /x
        )
       {
           my $paren  = $1;

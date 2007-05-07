@@ -37,7 +37,15 @@ my %OPINIONS = (
                 '(something I like a whole darn lot)++ # i like it'
                 => mk_action('something i like a whole darn lot', 
                              'i like it', 1),
-                
+
+                # actual messages from IRC
+                "I AM EATING SOME {CINNAMON ROLLS}++ RIGHT NOW"
+                  => mk_action('cinnamon rolls', undef, 1),
+                "31337++" 
+                  => mk_action('31337', undef, 1),
+                "db2--"
+                => mk_action('db2', undef, -1),
+
                 # Perl::Modules
                 'Acme::Read::Like::A::Monger++' 
                 => mk_action('acme::read::like::a::monger', undef, 1),
