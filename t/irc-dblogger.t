@@ -48,5 +48,5 @@ my $opinion = $schema->record($action);
 
 ok($opinion, 'inserted opinion record ok');
 is($opinion->nickname->person->pid, $person->pid, "opinion person is the same");
-is($opinion->channel, '#plusplus');
+is($opinion->channel->channel, '#plusplus');
 is($opinion->thing->thing, 'plusplus');
