@@ -14,41 +14,41 @@ Readonly my $CHANNEL => '#perl++';
 
 my %OPINIONS = (
                 # start with the basics
-                'foo++ # bar' => mk_action('foo', 'bar',  1),
-                'foo++'       => mk_action('foo', undef,  1),
-                'foo-- # bar' => mk_action('foo', 'bar', -1),
-                'foo--'       => mk_action('foo', undef, -1),
+                'foo++ # bar' => mk_action('foo',  1, 'bar'),
+                'foo++'       => mk_action('foo',  1),
+                'foo-- # bar' => mk_action('foo', -1, 'bar'),
+                'foo--'       => mk_action('foo', -1),
                 
                 # grouping
-                '(foo)++'     => mk_action('foo', undef,  1),
-                '[foo]++'     => mk_action('foo', undef,  1),
-                '{foo}++'     => mk_action('foo', undef,  1),
+                '(foo)++'     => mk_action('foo',  1),
+                '[foo]++'     => mk_action('foo',  1),
+                '{foo}++'     => mk_action('foo',  1),
                 
                 # spaces
-                '  foo++  '   => mk_action('foo', undef,  1),
-                '( foo )++'   => mk_action('foo', undef,  1),
-                '[ foo ]++'   => mk_action('foo', undef,  1),
-                '{ foo }++'   => mk_action('foo', undef,  1),
+                '  foo++  '   => mk_action('foo',  1),
+                '( foo )++'   => mk_action('foo',  1),
+                '[ foo ]++'   => mk_action('foo',  1),
+                '{ foo }++'   => mk_action('foo',  1),
 
                 # capitals
-                'FOO++'       => mk_action('foo', undef,  1),
+                'FOO++'       => mk_action('foo',  1),
                 
                 # things with spaces
                 '(something I like a whole darn lot)++ # i like it'
                 => mk_action('something i like a whole darn lot', 
-                             'i like it', 1),
+                             1, 'i like it'),
 
                 # actual messages from IRC
                 "I AM EATING SOME {CINNAMON ROLLS}++ RIGHT NOW"
-                  => mk_action('cinnamon rolls', undef, 1),
+                  => mk_action('cinnamon rolls', 1),
                 "31337++" 
-                  => mk_action('31337', undef, 1),
+                  => mk_action('31337', 1),
                 "db2--"
-                => mk_action('db2', undef, -1),
+                => mk_action('db2', -1),
 
                 # Perl::Modules
                 'Acme::Read::Like::A::Monger++' 
-                => mk_action('acme::read::like::a::monger', undef, 1),
+                => mk_action('acme::read::like::a::monger', 1),
 
                 # weird stuff
                 '++++' => undef,
@@ -111,8 +111,8 @@ sub is_same {
 
 sub mk_action {
     my $word   = shift;
-    my $reason = shift;
     my $points = shift;
+    my $reason = shift;
 
     return App::Ircxory::Robot::Action->
       new({ who     => $USER,
