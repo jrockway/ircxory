@@ -114,4 +114,24 @@ sub _get_nickname {
     return $nickname;
 }
 
+=head2 karma_for($thing)
+
+Returns the sum of points for C<$thing>
+
+=cut
+
+sub karma_for {
+    my $schema = shift;
+    my $thing  = shift;
+    
+    my $dbh = $schema->storage->dbh;
+    my $sth = $dbh->prepare(
+      'SELECT sum(points) FROM opinions o, things t
+       WHERE o.tid=t.tid AND thing=?');
+    
+    $sth->execute($thing);
+    my ($sum) = $sth->fetchrow_array();
+    return $sum || 0;
+}
+
 1;
