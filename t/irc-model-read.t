@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 9;
 use YAML;
 use Directory::Scratch;
 use App::Ircxory::Schema;
@@ -48,6 +48,16 @@ kf('nothing', 0);
 kf('dongs', 3);
 kf('perl', 1);
 kf('jifty', -1);
+
+sub rf {
+    my ($word, $expect) = @_;
+    is_deeply([sort $schema->reasons_for($word)], [sort @$expect]);
+}
+
+rf('nothing', []);
+rf('dongs', [qw/splort squirt dongs/]);
+rf('jifty', [qw/ajaxy/]);
+rf('perl', [q/perl/]);
 
 __END__
 Nicknames:

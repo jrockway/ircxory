@@ -132,4 +132,23 @@ sub karma_for {
              })->get_column('points')->sum || 0;
 }
 
+
+=head2 reasons_for($thing)
+
+Returns a list of reasons why a certian thing was karama'd
+
+=cut
+
+sub reasons_for {
+    my $schema = shift;
+    my $thing  = shift;
+
+    return $schema->resultset('Opinions')->
+      search({ 'thing.thing' => $thing,
+               reason        => \'IS NOT NULL' },
+             { include_columns => 'thing.thing',
+               join            => ['thing'],
+             })->get_column('reason')->all;
+}
+
 1;
