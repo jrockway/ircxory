@@ -10,7 +10,7 @@ use lib "$Bin/../lib";
 
 use App::Ircxory::Robot;
 use App::Ircxory::Robot::Action;
-use App::Ircxory::Robot::DBLogger;
+use App::Ircxory::Robot::Model;
 use App::Ircxory::Config;
 use Log::Log4perl;
 
@@ -35,7 +35,7 @@ die "The config file needs a 'bot' section"
 
 # connect to the database
 $log->debug("Connecting to the database");
-my $recorder = App::Ircxory::Robot::DBLogger->connect;
+my $recorder = App::Ircxory::Robot::Model->connect;
 
 # load the bot
 $log->debug("Loading bot");
