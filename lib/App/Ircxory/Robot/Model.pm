@@ -123,15 +123,11 @@ Returns the sum of points for C<$thing>
 sub karma_for {
     my $schema = shift;
     my $thing  = shift;
+
     
-    my $dbh = $schema->storage->dbh;
-    my $sth = $dbh->prepare(
-      'SELECT sum(points) FROM opinions o, things t
-       WHERE o.tid=t.tid AND thing=?');
-    
-    $sth->execute($thing);
-    my ($sum) = $sth->fetchrow_array();
-    return $sum || 0;
+    return $schema->resultset('Opinions')->
+      search({thing => $thing},{join => ['things']})->
+        get_column('points')->sum || 0;
 }
 
 1;
