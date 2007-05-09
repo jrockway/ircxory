@@ -126,8 +126,10 @@ sub karma_for {
 
     
     return $schema->resultset('Opinions')->
-      search({thing => $thing},{join => ['things']})->
-        get_column('points')->sum || 0;
+      search({ 'thing.thing' => $thing },
+             { include_columns => 'thing.thing',
+               join            => ['thing'],
+             })->get_column('points')->sum || 0;
 }
 
 1;
