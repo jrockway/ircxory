@@ -43,7 +43,7 @@ my $bot;
 eval {
     $bot = App::Ircxory::Robot->new({
                                      %{$config->{bot}}, 
-                                     callback => $recorder->get_recorder
+                                     model => $recorder,
                                     });
 };
 if ($@) {

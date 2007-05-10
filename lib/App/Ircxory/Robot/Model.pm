@@ -36,22 +36,6 @@ sub connect {
     return $invocant->SUPER::connect($dsn, $user, $pass, $args);
 }
 
-=head2 get_recorder
-
-Returns a subref that will call record with an action, given an
-action.
-
-=cut
-
-sub get_recorder {
-    my $self = shift;
-    return sub {
-        my $action = shift;
-        $self->record($action);
-    }
-}
-
-
 =head2 record($action)
 
 Record a App::Ircxory::Robot::Action to the database
