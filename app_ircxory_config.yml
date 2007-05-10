@@ -7,7 +7,6 @@ bot:
     - "#catalyst"
     - "#catalyst-dev"
     - "#perl"
-    - "#perl++"
     - "#killtrac"
     - "#dbix-class"
     - "#angerwhale"
