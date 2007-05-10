@@ -148,7 +148,7 @@ Opinions:
      - 1
      - 1
      - splort
-     - "dongs++ # squirt"
+     - "dongs++ # splort"
     - 
      - 4
      - 3
