@@ -203,7 +203,7 @@ sub irc_public {
                 last pare_reasons if $chars < 0;
             }
 
-            map {$_ = qq{"$_"}} @reasons;
+            @reasons = map {qq{"$_"}} @reasons;
             my $foo = pop @reasons;
             my $bar = pop @reasons;
             my $baz = pop @reasons;
@@ -213,8 +213,8 @@ sub irc_public {
             if ($front && $baz) {
                 $msg .= "$front, $baz, $bar, and $foo";
             }
-            elsif ($bar) {
-                $msg .= "$bar, $bar, and $foo";
+            elsif ($baz) {
+                $msg .= "$baz, $bar, and $foo";
             }
             elsif ($bar) {
                 $msg .= "$bar and $foo";
