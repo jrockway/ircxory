@@ -15,6 +15,7 @@ requires 'Exporter';
 requires 'Readonly';
 
 build_requires 'Test::More';
+build_requires 'ok';
 
 auto_install;
 WriteAll;

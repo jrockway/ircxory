@@ -151,20 +151,43 @@ sub irc_public {
 
     my $log = Log::Log4perl->get_logger('App::Ircxory::Robot');
 
+    # parse the event
     my @result = parse($heap->{irc}, $who, $what, $where);
     my $first = $result[0];
-    
     return unless defined $first;
     
-    if (eval{$first->isa('App::Ircxory::Robot::Action')}) {
-        $log->debug('logging an opinion: '. Dumper($first));
-        $heap->{instance}{model}->record($first);
+    my $cmd = ref $first;
+    if (!$cmd) {
+        # not a ref, post a POE event
+        $kernel->post($sender => @result);
         return;
     }
     
-    if (@result) {
-        $kernel->post($sender => @result);
+    # a ref, consult a lookup table
+    my %EVENT_DISPATCH =
+      ( 'App::Ircxory::Robot::Action' => 
+        sub {     
+            $log->debug('logging an opinion: '. Dumper($first));
+            $heap->{instance}{model}->record($first);
+        },
+        
+        'App::Ircxory::Robot::Query::KarmaFor' =>
+        sub {
+            my ($nick) = parse_nickname($who);
+            my $target = $first->target;
+            $log->debug("karma request for $target by $who");
+            my $karma = $heap->{instance}{model}->karma_for($target);
+            $karma = ($karma) ? "karma of $karma" : "neutral karma";
+            $kernel->post($sender => 'privmsg' => $where =>
+                          "$nick: $target has $karma");
+        },
+      );
+    
+    eval { no warnings; $EVENT_DISPATCH{$cmd}->() };
+    if ($@) {
+        $log->warn("unknown command $cmd");
     }
+    return;
 }
 
 sub _default {

@@ -7,6 +7,9 @@ use warnings;
 use base 'Exporter';
 our @EXPORT = qw(parse parse_nickname);
 
+use App::Ircxory::Robot::Query::KarmaFor;
+use App::Ircxory::Robot::Action;
+
 use Regexp::Common qw/balanced/;
 use Log::Log4perl;
 use Readonly;
@@ -66,6 +69,15 @@ sub parse {
             $log->debug("$who asked us to shutdown (on $where)");
             return ('shutdown');
         }
+    }
+
+    # respond to a "karma for $what ?" query
+    if ($what =~ /(?:$addressed_re)? \s* karma \s+ (?:for \s+)? ([^?]+)[?]?$/x) {
+        return App::Ircxory::Robot::Query::KarmaFor->
+          new({ requestor => $who,
+                target    => $1,
+                channel   => $where,
+              });
     }
 
     my $parens =  $RE{balanced}{-parens=>'(){}[]<>'}{-keep};
