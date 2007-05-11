@@ -138,7 +138,7 @@ sub reasons_for {
         @points = ('points' => {'>=', 1});
     }
     
-    return $schema->resultset('Opinions')->
+    my @reasons = $schema->resultset('Opinions')->
       search({ 'thing.thing' => $thing,
                reason        => \'IS NOT NULL',
                @points,
@@ -146,6 +146,13 @@ sub reasons_for {
              { include_columns => 'thing.thing',
                join            => ['thing'],
              })->get_column('reason')->all;
+    
+    # cleanup
+    @reasons = grep {length $_ > 1} @reasons;
+    my %foo;
+    @foo{@reasons} = @reasons;   
+
+    return keys %foo;
 }
 
 1;

@@ -180,12 +180,48 @@ sub irc_public {
             $karma = ($karma) ? "karma of $karma" : "neutral karma";
             $kernel->post($sender => 'privmsg' => $where =>
                           "$nick: $target has $karma");
+        },  
+        
+        'App::Ircxory::Robot::Query::ReasonFor' =>
+        sub {
+            my ($nick)    = parse_nickname($who);
+            my $target    = $first->target;
+            my $direction = $first->direction;
+            $log->debug("reason request for $target by $who");
+            my @reasons = $heap->{instance}{model}->reasons_for($target);
+
+            my $rd  = ($direction > 0 ? 'like' : 'dislike');
+            
+            map {$_ = qq{"$_"}} @reasons;
+            my $foo = pop @reasons;
+            my $bar = pop @reasons;
+            my $baz = pop @reasons;
+            
+            my $msg = "$nick: people $rd $target because of ";
+            my $front = join ', ', @reasons;
+            if ($front && $baz) {
+                $msg .= "$front, $baz, $bar, and $foo";
+            }
+            elsif ($bar) {
+                $msg .= "$bar, $bar, and $foo";
+            }
+            elsif ($bar) {
+                $msg .= "$bar and $foo";
+            }
+            elsif ($foo) {
+                $msg .= "$foo... why else?";
+            }
+            else {
+                $msg = "there's really no reason to $rd $target, $nick";
+            }
+            
+            $kernel->post($sender => 'privmsg' => $where => $msg);
         },
       );
     
     eval { no warnings; $EVENT_DISPATCH{$cmd}->() };
     if ($@) {
-        $log->warn("unknown command $cmd");
+        $log->warn("unknown command $cmd ($@)");
     }
     return;
 }
