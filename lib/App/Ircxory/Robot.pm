@@ -22,7 +22,7 @@ App::Ircxory::Robot - the ircbot to collect ratings
         new({ nick     => 'spybot',
               server   => 'irc.perl.org',
               channels => [qw|#chicago.pm #dongs #catalyst|],
-              callback => \&callme, 
+              model    => App::Ircxory::Robot::Model->connect, 
             });
  
     $bot->go; # blocks
@@ -38,10 +38,8 @@ App::Ircxory::Robot - the ircbot to collect ratings
 =head1 DESCRIPTION
 
 It's an IRC bot.  It sits and listens to the channels, looking for
-people plusplus and minusminus-ing things.  When that happens, your
-callback sub gets a
-L<App::Ircxory::Robot::Action|App::Ircxory::Robot::Action> object with
-info about the action.
+people plusplus and minusminus-ing things.  When that happens, the
+event is inserted into the database via App::Ircxory::Schema.
 
 =head1 METHODS
 
@@ -87,7 +85,7 @@ sub new {
     croak 'need nick'     unless $self->{nick};
     croak 'need server'   unless $self->{server};
     croak 'need channels' unless ref $self->{channels} eq 'ARRAY';
-    croak 'need callback' unless ref $self->{callback} eq 'CODE';
+    croak 'need model'    unless ref $self->{model};
     
     # init bot
     my $irc = POE::Component::IRC->
@@ -155,12 +153,12 @@ sub irc_public {
 
     my @result = parse($who, $what, $where);
     my $first = $result[0];
-    if (defined $first && ref $first eq 'App::Ircxory::Robot::Action') {
+    if (defined $first && $first->isa('App::Ircxory::Robot::Action')) {
         $log->debug('logging an opinion: '. Dumper($first));
-        $heap->{instance}->{callback}->($first);
+        $heap->{instance}{model}->record($action);
         return;
     }
-
+    
     if (@result) {
         $kernel->post($sender => @result);
     }
