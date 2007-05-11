@@ -14,6 +14,8 @@ use App::Ircxory::Robot::Model;
 use App::Ircxory::Config;
 use Log::Log4perl;
 
+my @channels = @ARGV;
+
 # setup log4perl
 my $logconfig  = "$Bin/../root/ircbotlog.conf";
 Log::Log4perl->init($logconfig);
@@ -32,6 +34,8 @@ if ($@) {
 
 die "The config file needs a 'bot' section" 
   unless ref $config->{bot};
+
+$config->{bot}->{channels} = [@channels] if @channels;
 
 # connect to the database
 $log->debug("Connecting to the database");
