@@ -11,6 +11,7 @@ use POE::Kernel;
 use App::Ircxory::Robot::Action;
 use App::Ircxory::Robot::Parser;
 use Data::Dumper;
+use List::Util qw(shuffle);
 
 =head1 NAME
 
@@ -188,11 +189,20 @@ sub irc_public {
             my $target    = $first->target;
             my $direction = $first->direction;
             $log->debug("reason request for $target by $who");
-            my @reasons = $heap->{instance}{model}->
+            my @raw_reasons = $heap->{instance}{model}->
               reasons_for($target, $direction);
 
             my $rd  = ($direction > 0 ? 'like' : 'dislike');
-            
+
+            my @reasons;
+            my $chars = 150;
+          pare_reasons:
+            foreach my $reason (shuffle @raw_reasons) {
+                push @reasons, $reason;
+                $chars -= length $reason;
+                last pare_reasons if $chars < 0;
+            }
+
             map {$_ = qq{"$_"}} @reasons;
             my $foo = pop @reasons;
             my $bar = pop @reasons;

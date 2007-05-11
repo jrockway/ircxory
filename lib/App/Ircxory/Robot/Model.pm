@@ -6,7 +6,7 @@ use warnings;
 use Carp;
 use App::Ircxory::Config;
 use App::Ircxory::Robot::Parser;
-
+use List::MoreUtils qw(uniq);
 use base 'App::Ircxory::Schema';
 
 =head1 NAME
@@ -140,19 +140,14 @@ sub reasons_for {
     
     my @reasons = $schema->resultset('Opinions')->
       search({ 'thing.thing' => lc $thing,
-               reason        => \'IS NOT NULL',
+               reason        => {'<>', ""},
                @points,
              },
              { include_columns => 'thing.thing',
                join            => ['thing'],
              })->get_column('reason')->all;
     
-    # cleanup
-    @reasons = grep {length $_ > 1} @reasons;
-    my %foo;
-    @foo{@reasons} = @reasons;   
-
-    return keys %foo;
+    return uniq @reasons;
 }
 
 1;

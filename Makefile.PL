@@ -13,6 +13,8 @@ requires 'Regexp::Common::balanced';
 requires 'YAML';
 requires 'Exporter';
 requires 'Readonly';
+requires 'List::Util';
+requires 'List::MoreUtils';
 
 build_requires 'Test::More';
 build_requires 'ok';
