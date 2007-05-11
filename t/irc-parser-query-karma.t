@@ -23,6 +23,7 @@ my %COMMANDS = (
                 'foobot: karma jrockway'      => mk_kq('jrockway'),
                 'foobot: karma for jrockway?' => mk_kq('jrockway'),
                 'foobot: karma jrockway?'     => mk_kq('jrockway'),
+                'foobot: karma jrockway    ?' => mk_kq('jrockway'),
                 'hello there foobot'          => undef,
                 'foobot: sungo it!'           => undef,
                 'la la la'                    => undef,

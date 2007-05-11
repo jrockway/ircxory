@@ -8,6 +8,7 @@ use base 'Exporter';
 our @EXPORT = qw(parse parse_nickname);
 
 use App::Ircxory::Robot::Query::KarmaFor;
+use App::Ircxory::Robot::Query::ReasonFor;
 use App::Ircxory::Robot::Action;
 
 use Regexp::Common qw/balanced/;
@@ -72,14 +73,31 @@ sub parse {
     }
 
     # respond to a "karma for $what ?" query
-    if ($what =~ /$addressed_re \s* karma \s+ (?:for \s+)? ([^?]+)[?]?$/x) {
+    if ($what =~ /$addressed_re \s* karma \s+ (?:for \s+)? ([^?]+)\s*[?]?$/x) {
+        my $target = $1;
+        $target =~ s/^\s+//;
+        $target =~ s/\s+$//;
+        
         return App::Ircxory::Robot::Query::KarmaFor->
           new({ requestor => $who,
-                target    => $1,
+                target    => $target,
                 channel   => $where,
               });
     }
 
+    # respond to a "reason why $what is (liked|disliked)" query
+    if ($what =~ /$addressed_re \s* reasons? \s+ 
+                  why \s+ (.+) \s + (?:is|are) \s+ (liked|disliked) [?]?$
+                 /x) 
+      {
+          return App::Ircxory::Robot::Query::ReasonFor->
+            new({ requestor => $who,
+                  target    => $1,
+                  direction => ($2 eq 'liked' ? 1 : -1),
+                  channel   => $where,
+                });
+      }
+    
     my $parens =  $RE{balanced}{-parens=>'(){}[]<>'}{-keep};
     if ($what =~ /(?:                   # what we're voting on:
                       $parens           # something in parens
