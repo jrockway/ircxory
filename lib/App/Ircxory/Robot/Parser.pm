@@ -72,7 +72,7 @@ sub parse {
     }
 
     # respond to a "karma for $what ?" query
-    if ($what =~ /(?:$addressed_re)? \s* karma \s+ (?:for \s+)? ([^?]+)[?]?$/x) {
+    if ($what =~ /$addressed_re \s* karma \s+ (?:for \s+)? ([^?]+)[?]?$/x) {
         return App::Ircxory::Robot::Query::KarmaFor->
           new({ requestor => $who,
                 target    => $1,
