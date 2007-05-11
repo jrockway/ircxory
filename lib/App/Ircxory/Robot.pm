@@ -155,7 +155,7 @@ sub irc_public {
     my $first = $result[0];
     if (defined $first && $first->isa('App::Ircxory::Robot::Action')) {
         $log->debug('logging an opinion: '. Dumper($first));
-        $heap->{instance}{model}->record($action);
+        $heap->{instance}{model}->record($first);
         return;
     }
     
