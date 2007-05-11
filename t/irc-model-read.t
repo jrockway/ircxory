@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 16;
 use YAML;
 use Directory::Scratch;
 use App::Ircxory::Schema;
@@ -50,14 +50,23 @@ kf('perl', 1);
 kf('jifty', -1);
 
 sub rf {
-    my ($word, $expect) = @_;
-    is_deeply([sort $schema->reasons_for($word)], [sort @$expect]);
+    my ($word, $expect, $d) = @_;
+    is_deeply([sort $schema->reasons_for($word, $d)], [sort @$expect]);
 }
 
 rf('nothing', []);
 rf('dongs', [qw/splort squirt dongs/]);
 rf('jifty', [qw/ajaxy/]);
-rf('perl', [q/perl/]);
+rf('perl', [qw/perl/]);
+
+rf('perl', [qw/perl/], 1);
+rf('perl', [qw/perl/], 0);
+rf('perl', [], -1);
+
+rf('foo', [qw/up down/]);
+rf('foo', [qw/up/], 1);
+rf('foo', [qw/down/], -1);
+rf('foo', [qw/up down/], 0);
 
 __END__
 Nicknames:
@@ -113,6 +122,9 @@ Things:
     - 
      - 3
      - dongs
+    -
+     - 4
+     - foo
 
 Opinions:
   columns:
@@ -165,6 +177,23 @@ Opinions:
      - 1
      - dongs
      - "dongs++ # dongs"
+    -
+     - 6
+     - 2
+     - 4
+     - 1
+     - 1
+     - up
+     - "foo++ # up"
+    -
+     - 7
+     - 2
+     - 4
+     - 1
+     - "-1"
+     - down
+     - "foo-- # down"
+
 
 Channels:
   columns:

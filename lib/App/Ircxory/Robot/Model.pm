@@ -117,19 +117,32 @@ sub karma_for {
 }
 
 
-=head2 reasons_for($thing)
+=head2 reasons_for($thing, [$good])
 
-Returns a list of reasons why a certian thing was karama'd
+Returns a list of reasons why a certian thing was karama'd.  If
+good is 1, then only ++s will be shown; if good is -1, then only --s
+will be returned.
 
 =cut
 
 sub reasons_for {
     my $schema = shift;
     my $thing  = shift;
+    my $good   = shift;
 
+    my @points;
+    if (defined $good && $good == -1) {
+        @points = ('points' => {'<=', -1});
+    }
+    elsif (defined $good && $good == 1) {
+        @points = ('points' => {'>=', 1});
+    }
+    
     return $schema->resultset('Opinions')->
       search({ 'thing.thing' => $thing,
-               reason        => \'IS NOT NULL' },
+               reason        => \'IS NOT NULL',
+               @points,
+             },
              { include_columns => 'thing.thing',
                join            => ['thing'],
              })->get_column('reason')->all;
