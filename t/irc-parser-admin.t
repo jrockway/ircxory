@@ -15,6 +15,7 @@ Readonly my $ADMIN_USER => 'jrockway!~jrockway@foo.jrock.us';
 Readonly my $USER       => 'me!~me@my/machine';
 Readonly my $CHANNEL    => '#foo.bar';
 Readonly my $BOT        => 'foobot';
+my $BOTINFO = { nick => $BOT};
 
 my %COMMANDS = (
                 # these 3 actually work
@@ -25,22 +26,30 @@ my %COMMANDS = (
                 # this fails because the current channel is #foo.bar
                 'foobot: part #quux' => [],
                 
-                # and these three fail because the bot wasn't addressed
+                # these three fail because the bot wasn't addressed
                 'part #foo.bar' => [],
                 'join #foo.bar' => [],
-                'go away'       => [],
+                'go away'       => [],                
+
+                # these three fail because the bot isn't "goobot"
+                'goobot: part #foo.bar' => [],
+                'goobot: join #foo.bar' => [],
+                'goobot: go away'       => [],
+
+                # this fails because "i hate you" isn't a command
+                'goobot: i hate you' => [],
                );
 
 # the +1 is for testing channel name escaping in regexes (bug #1, heh)
 plan tests => (scalar keys %COMMANDS) + 1;
 
 {
-    my $got = [(parse($ADMIN_USER, 'foobot: part #perl++', '#perl++'))];
+    my $got = [(parse($BOTINFO, $ADMIN_USER, 'foobot: part #perl++', '#perl++'))];
     is_deeply($got, ['part', '#perl++'], 'part #perl++ works');
 }
 
 while (my ($k, $v) = each %COMMANDS) {
-    my $got = [(parse($ADMIN_USER, $k, $CHANNEL))];
+    my $got = [(parse($BOTINFO, $ADMIN_USER, $k, $CHANNEL))];
     my $exp = $v;
     is_deeply($got, $exp, "command '$k' parsed to the right command");
 }

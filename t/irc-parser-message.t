@@ -9,6 +9,7 @@ use App::Ircxory::Robot::Parser;
 use Data::Dumper;
 use Readonly;
 
+my $BOT = {nick => 'foobot'};
 Readonly my $USER    => 'jrockway!~jon@jrock.us';
 Readonly my $CHANNEL => '#perl++';
 
@@ -60,7 +61,7 @@ my %OPINIONS = (
 plan tests => scalar keys %OPINIONS;
 
 while (my ($k, $v) = each %OPINIONS) {
-    my $got = parse($USER, $k, $CHANNEL);
+    my $got = parse($BOT, $USER, $k, $CHANNEL);
     my $exp = $v;
     
     is_same($got, $exp, "$k parsed to the correct action");

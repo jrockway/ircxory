@@ -151,9 +151,12 @@ sub irc_public {
 
     my $log = Log::Log4perl->get_logger('App::Ircxory::Robot');
 
-    my @result = parse($who, $what, $where);
+    my @result = parse($heap->{irc}, $who, $what, $where);
     my $first = $result[0];
-    if (defined $first && $first->isa('App::Ircxory::Robot::Action')) {
+    
+    return unless defined $first;
+    
+    if (eval{$first->isa('App::Ircxory::Robot::Action')}) {
         $log->debug('logging an opinion: '. Dumper($first));
         $heap->{instance}{model}->record($first);
         return;

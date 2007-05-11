@@ -30,47 +30,53 @@ thru to post.
 =cut
 
 sub parse {
+    my $bot   = shift;
     my $who   = shift;
     my $what  = shift;
     my $where = shift;
     my $when  = shift;
     my $why   = shift;
     my $how   = shift; # ok, some of these are made up
+    
+    # see if this message is addressed to us
+    my $botnick = $bot->{nick}; 
+    my $addressed_re = qr/^$botnick [,:]/x;
+    my $addressed = 0; # true if this message was to the bot
+    $addressed = 1 if $what =~ $addressed_re;
 
-    my $log   = Log::Log4perl->get_logger('App::Ircxory::Robot');
-
+    my $log = Log::Log4perl->get_logger('App::Ircxory::Robot');
+    
     $where = @{$where}[0] if ref $where eq 'ARRAY';
-
     my ($nick, $login, $host) = parse_nickname($who);
-
+    
     # respond to an admin command
-    if ($nick eq 'jrockway') { # yay
+    if ($nick eq 'jrockway' && $addressed) { # yay
         my $chan = quotemeta $where;
-        if ($what =~ /^\w+: part $chan$/) {
+        if ($what =~ /$addressed_re part $chan$/) {
             $log->debug("$who asked us to part $chan");
             return ('part', $where);
         }
         
-        if ($what =~ /^\w+: join (#.+)$/) {
+        if ($what =~ /$addressed_re join (#.+)$/) {
             $log->debug("$who asked us to join $1");
             return ('join', $1);
         }
 
-        if ($what =~ /^\w+: go away$/){
+        if ($what =~ /$addressed_re go away$/){
             $log->debug("$who asked us to shutdown (on $where)");
             return ('shutdown');
         }
     }
 
     my $parens =  $RE{balanced}{-parens=>'(){}[]<>'}{-keep};
-    if ($what =~ /(?: # what we're voting on
-                      $parens        # something in parens
-                      |
+    if ($what =~ /(?:                   # what we're voting on:
+                      $parens           # something in parens
+                      |                 #  -or-
                       ([A-Za-z_:0-9]+)  # a single word++
                   )
-                  ([+-]{2})          # the operation (inc or dec)
-                  \s*                # spaces, who cares
-                  (?:[#] \s* (.+)$)?  # and an optional reason
+                  ([+-]{2})             # the operation (inc or dec)
+                  \s*                   # spaces, who cares
+                  (?:[#] \s* (.+)$)?    # and an optional reason
                  /x
        )
       {
