@@ -110,7 +110,7 @@ sub karma_for {
 
     
     return $schema->resultset('Opinions')->
-      search({ 'thing.thing' => $thing },
+      search({ 'thing.thing' => lc $thing },
              { include_columns => 'thing.thing',
                join            => ['thing'],
              })->get_column('points')->sum || 0;
@@ -129,7 +129,7 @@ sub reasons_for {
     my $schema = shift;
     my $thing  = shift;
     my $good   = shift;
-
+    
     my @points;
     if (defined $good && $good == -1) {
         @points = ('points' => {'<=', -1});
@@ -139,7 +139,7 @@ sub reasons_for {
     }
     
     my @reasons = $schema->resultset('Opinions')->
-      search({ 'thing.thing' => $thing,
+      search({ 'thing.thing' => lc $thing,
                reason        => \'IS NOT NULL',
                @points,
              },

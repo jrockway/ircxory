@@ -188,7 +188,8 @@ sub irc_public {
             my $target    = $first->target;
             my $direction = $first->direction;
             $log->debug("reason request for $target by $who");
-            my @reasons = $heap->{instance}{model}->reasons_for($target);
+            my @reasons = $heap->{instance}{model}->
+              reasons_for($target, $direction);
 
             my $rd  = ($direction > 0 ? 'like' : 'dislike');
             
