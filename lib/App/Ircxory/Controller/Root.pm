@@ -7,7 +7,7 @@ use warnings;
 use base 'Catalyst::Controller';
 __PACKAGE__->config(namespace => q{});
 
-sub index : Private {
+sub main : Path {
     my ($self, $c, @args) = @_;
     $c->response->body("It works.");
 }
@@ -18,7 +18,7 @@ App::Ircxory::Controller::Root - root controller for ircxory
 
 =head1 ACTIONS
 
-=head2 index
+=head2 main
 
 The main page, available at C</>.
 
