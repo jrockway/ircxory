@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use App::Ircxory::Robot::Parser;
 use List::MoreUtils qw(uniq);
+use Carp;
 
 use base 'DBIx::Class::Schema';
 __PACKAGE__->load_classes;
@@ -134,6 +135,42 @@ sub reasons_for {
              })->get_column('reason')->all;
     
     return uniq @reasons;
+}
+
+=head2 highest([$how_many [, $multiplier]])
+
+Returns a list of C<$how_many> highest rated items, or 10 if not
+specified.  If C<$multiplier> is C<-1>, then the lowest-rated items
+are returned instead.  (C<$multiplier> defaults to 1.)
+
+   my @top_ten = $schema->highest();
+   my @bot_ten = $schema->highest(10, -1);
+
+   my @top_40  = $schema->highest(40);
+   ...
+
+=cut
+
+sub highest {
+    my $schema = shift;
+    my $count  = shift || 10;
+    my $mult   = shift || 1;
+    
+    croak "bad multiplier $mult; use 1 or -1"
+      if $mult != -1 && $mult != 1;
+    
+    my $sort = $mult > 0 ? 'DESC' : 'ASC';
+
+    return $schema->resultset('Opinions')->
+      search({},
+             { include_columns => ['thing.thing', 'me.points', 
+                                   'SUM(me.points) AS tot'],
+               join            => ['thing'],
+               group_by        => 'thing',
+               order_by        => "tot $sort",
+               rows            => $count,
+               page            => 1,
+             })->get_column('thing')->all;
 }
 
 1;

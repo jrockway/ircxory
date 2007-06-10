@@ -19,9 +19,11 @@ requires 'Exporter';
 requires 'Readonly';
 requires 'List::Util';
 requires 'List::MoreUtils';
+requires 'Carp';
 
 build_requires 'Test::More';
 build_requires 'ok';
+build_requires 'Test::Exception';
 
 auto_install;
 WriteAll;
