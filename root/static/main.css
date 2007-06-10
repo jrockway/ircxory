@@ -2,3 +2,7 @@
 span.positive_score { color: green; }
 span.negative_score { color: red;   }
 a.thing { color: black; text-decoration: none; }
+
+.pair h3 { margin: 0; padding: 0; }
+.left  { width: 40%; }
+.right { width: 40%; }

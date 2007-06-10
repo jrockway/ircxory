@@ -9,4 +9,5 @@
     <h3>[% right_title | html %]</h3>
     [% list_things(right) %]
   </div>
+  <br class="clear" />
 </div>
