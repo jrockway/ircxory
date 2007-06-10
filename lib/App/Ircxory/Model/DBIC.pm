@@ -2,7 +2,6 @@ package App::Ircxory::Model::DBIC;
 
 use strict;
 use base 'Catalyst::Model::DBIC::Schema';
-
 __PACKAGE__->config(
     schema_class => 'App::Ircxory::Schema',
     connect_info => [
@@ -10,6 +9,12 @@ __PACKAGE__->config(
         
     ],
 );
+
+sub ACCEPT_CONTEXT {
+    my $self = shift;
+    $self->NEXT::ACCEPT_CONTEXT(@_);
+    return $self->schema;
+}
 
 =head1 NAME
 

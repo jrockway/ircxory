@@ -1,0 +1,30 @@
+[% # format a thing %]
+[% MACRO thing(thing) BLOCK %] 
+<a class="thing" href="[% c.uri_for('/things',thing) | html%]">
+  [% thing | html %]
+</a>
+[% END %]
+
+[% # format a score %]
+[% MACRO score(score) BLOCK %]
+  [% IF score > 0 %]
+    [% SET class = "positive" %]
+  [% ELSE %]
+    [% SET class = "negative" %]
+  [% END %]
+<span class="[% class %]_score">
+[% score | html %]
+</span>
+[% END %]
+
+[% # transform a list of [thing, score] tuples into HTML %]
+[% MACRO list_things(key) BLOCK %]
+<ul>
+  [% FOREACH row = key %]
+  <li>
+    [% thing(row.0) %]
+    [% score(row.1) %]
+  </li>
+  [% END %]
+</ul>
+[% END %]

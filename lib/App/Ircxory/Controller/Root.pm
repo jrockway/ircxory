@@ -10,6 +10,10 @@ __PACKAGE__->config(namespace => q{});
 sub main : Path {
     my ($self, $c, @args) = @_;
     $c->stash(template => 'index.tt2');
+    
+    # highest/lowest by score
+    $c->stash(top_ten    => [$c->model('DBIC')->highest(10)]);
+    $c->stash(bottom_ten => [$c->model('DBIC')->highest(10, -1)]);
 }
 
 sub end : ActionClass(RenderView) {

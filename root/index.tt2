@@ -1,5 +1,15 @@
 [% WRAPPER wrapper.tt2  %]
-    <h1>Hello</h1>
-    <p>This worked.</p>
-[% END %]
+<h1>Ircxory</h1>
+[% INCLUDE pair.tt2
+   title='By Score' 
+     left_title = 'Ten Best Things' 
+       left = top_ten
+     right_title = 'Ten Worst Things'  
+     right = bottom_ten 
+%]
 
+<p>Want to voice your own opinion?  Connect to irc.perl.org and join
+#perl.  From there, just talk normally and ircxory will learn what you think!
+</p>
+
+[% END %]

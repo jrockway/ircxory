@@ -4,6 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
     <title>[% title || c.config.name %]</title>
+    <link rel="stylesheet" href="[% c.uri_for('/static/main.css') %]"
+          type="text/css" />
   </head>
   <body>
     [% content %]
