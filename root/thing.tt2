@@ -1,0 +1,34 @@
+[% WRAPPER wrapper.tt2 %]
+[% PROCESS thing_macros.tt2 %]
+[% MACRO list_reasons(reasons) BLOCK %]
+  [% FOREACH reason = reasons %]
+  <div class="reason">
+  [% person(reason.1) %] says...
+   <p>
+     "[% reason.0 %]"
+   </p>
+  </div>
+  [% END %]
+[% END %]
+<h2>Information on [% c.stash.thing | html %]</h2>
+<p>[% c.stash.thing | html %] has karma of [% score(points) %] from
+being upmodded [% score(ups) %] times and downmodded 
+<span class="negative_score">[% downs | html %]</span> times.
+</p>
+
+[% IF up_reasons.size > 0 %]
+<h3>Reasons why [% c.stash.thing | html %] is loved</h3>
+[% list_reasons(up_reasons) %]
+[% END %]
+
+[% IF down_reasons.size > 0 %]
+<h3>Reasons why [% c.stash.thing | html %] is hated</h3>
+[% list_reasons(down_reasons) %]
+[% END %]
+
+[% IF neutral_reasons.size > 0 %]
+<h3>Reasons why [% c.stash.thing | html %] is meh</h3>
+[% list_reasons(neutral_reasons) %]
+[% END %]
+
+[% END %]

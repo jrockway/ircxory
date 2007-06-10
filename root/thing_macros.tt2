@@ -1,8 +1,13 @@
 [% # format a thing %]
 [% MACRO thing(thing) BLOCK %] 
 <a class="thing" href="[% c.uri_for('/things',thing) | html%]">
-  [% thing | html %]
-</a>
+  [% thing | html %]</a>
+[% END %]
+
+[% # format a person's nickname %]
+[% MACRO person(person) BLOCK %] 
+<a class="person" href="[% c.uri_for('/people',person) | html%]">
+  [% person | html %]</a>
 [% END %]
 
 [% # format a score %]

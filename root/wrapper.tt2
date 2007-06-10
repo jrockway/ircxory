@@ -8,6 +8,7 @@
           type="text/css" />
   </head>
   <body>
+    <h1><a href="[% c.uri_for('/') | html %]">Ircxory</a></h1>
     [% content %]
   </body>
 </html>
