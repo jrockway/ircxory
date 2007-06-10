@@ -14,6 +14,13 @@ sub main : Path Args(0) {
     # highest/lowest by score
     $c->stash(top_ten    => [$c->model('DBIC')->highest(10)]);
     $c->stash(bottom_ten => [$c->model('DBIC')->highest(10, -1)]);
+
+    # list of joined channels for ircxory info page
+    my @channels = @{$c->config->{bot}{channels}||[]};
+    my $last     = pop @channels if @channels > 1;
+    my $channels = join ', ', @channels;
+    $channels .= " or $last" if $last;
+    $c->stash(channels  => $channels);
 }
 
 sub end : ActionClass(RenderView) {
