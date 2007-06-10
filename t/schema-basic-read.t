@@ -3,11 +3,10 @@
 
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 15;
 use YAML;
 use Directory::Scratch;
 use App::Ircxory::Schema;
-use App::Ircxory::Robot::Model;
 use App::Ircxory::Robot::Action;
 
 # setup database
@@ -16,8 +15,6 @@ my $db  = $tmp->touch('database');
 
 my $schema = App::Ircxory::Schema->connect("DBI:SQLite:$db");
 $schema->deploy;
-bless $schema => 'App::Ircxory::Robot::Model'; # ick.
-isa_ok($schema, 'App::Ircxory::Robot::Model');
 
 # read test fixtures from __END__
 my $data = do { local $/; <DATA> };

@@ -3,10 +3,9 @@
 
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 11;
 use Directory::Scratch;
 use App::Ircxory::Schema;
-use App::Ircxory::Robot::Model;
 use App::Ircxory::Robot::Action;
 
 my $tmp = Directory::Scratch->new;
@@ -14,9 +13,6 @@ my $db  = $tmp->touch('database');
 
 my $schema = App::Ircxory::Schema->connect("DBI:SQLite:$db");
 $schema->deploy;
-bless $schema => 'App::Ircxory::Robot::Model'; # ick.
-
-isa_ok($schema, 'App::Ircxory::Robot::Model');
 
 my $person;
 {
