@@ -85,22 +85,43 @@ sub _get_nickname {
     return $nickname;
 }
 
-=head2 karma_for($thing)
+=head2 karma_for($thing [, $direction])
 
-Returns the sum of points for C<$thing>
+Returns the sum of points for C<$thing>.  If C<$direction> is
+specified, the number of times $thing was modded in $direction is
+returned.
 
 =cut
 
 sub karma_for {
     my $schema = shift;
     my $thing  = shift;
-
+    my $dir    = shift;
     
-    return $schema->resultset('Opinions')->
-      search({ 'thing.thing' => lc $thing },
-             { include_columns => 'thing.thing',
-               join            => ['thing'],
-             })->get_column('points')->sum || 0;
+    my @points;
+    if (defined $dir && $dir == -1) {
+        @points = ('points' => {'<=', -1});
+    }
+    elsif (defined $dir && $dir == 1) {
+        @points = ('points' => {'>=', 1});
+    }
+    elsif (defined $dir && $dir == 0) {
+        @points = ('points' => {'==', 0});
+    }
+    
+    my $col = 
+      $schema->resultset('Opinions')->
+        search({ 'thing.thing' => lc $thing,
+                 @points,
+               },
+               { include_columns => 'thing.thing',
+                 join            => ['thing'],
+               })->get_column('points');
+    
+    if (defined $dir) {
+        return $col->func('count');
+    }
+    return $col->sum || 0;
 }
 
 

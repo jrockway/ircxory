@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 15;
+use Test::More tests => 27;
 use App::Ircxory::Robot::Action;
 use App::Ircxory::Test::Database;
 
@@ -20,6 +20,31 @@ kf('nothing', 0);
 kf('dongs', 3);
 kf('perl', 1);
 kf('jifty', -1);
+
+
+sub mf {
+    my ($word, $direction, $times) = @_;
+    is($schema->karma_for($word, $direction),
+       $times, "$word went $direction $times times");
+}
+
+# up
+mf('nothing', 1, 0);
+mf('dongs',   1, 3);
+mf('perl',    1, 1);
+mf('jifty',   1, 0);
+
+# neutral
+mf('nothing', 0, 0);
+mf('dongs',   0, 0);
+mf('perl',    0, 0);
+mf('jifty',   0, 0);
+
+# down
+mf('nothing',-1, 0);
+mf('dongs',  -1, 0);
+mf('perl',   -1, 0);
+mf('jifty',  -1, 1);
 
 sub rf {
     my ($word, $expect, $d) = @_;
