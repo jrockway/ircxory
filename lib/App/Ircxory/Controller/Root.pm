@@ -7,7 +7,7 @@ use warnings;
 use base 'Catalyst::Controller';
 __PACKAGE__->config(namespace => q{});
 
-sub main : Path {
+sub main : Path Args(0) {
     my ($self, $c, @args) = @_;
     $c->stash(template => 'index.tt2');
     
