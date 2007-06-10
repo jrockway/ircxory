@@ -149,6 +149,8 @@ are returned instead.  (C<$multiplier> defaults to 1.)
    my @top_40  = $schema->highest(40);
    ...
 
+The results are returned as a list of [thing, points] tuples.
+
 =cut
 
 sub highest {
@@ -161,16 +163,21 @@ sub highest {
     
     my $sort = $mult > 0 ? 'DESC' : 'ASC';
 
-    return $schema->resultset('Opinions')->
+    my $rs = $schema->resultset('Opinions')->
       search({},
-             { include_columns => ['thing.thing', 'me.points', 
-                                   'SUM(me.points) AS tot'],
-               join            => ['thing'],
-               group_by        => 'thing',
-               order_by        => "tot $sort",
-               rows            => $count,
-               page            => 1,
-             })->get_column('thing')->all;
+             { select    => ['thing', { SUM => 'points'}],
+               as        => [qw/thing tot/],
+               join      => ['thing'],
+               group_by  => 'thing',
+               order_by  => "SUM(points) $sort",
+               rows      => $count,
+               page      => 1,
+             });
+    my @result;
+    while (my $row = $rs->next) {
+        push @result, [$row->get_column('thing'), $row->get_column('tot')];
+    }
+    return @result;
 }
 
 1;

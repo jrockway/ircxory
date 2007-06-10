@@ -19,8 +19,10 @@ my $schema = App::Ircxory::Test::Database->connect;
 _record_actions(1, @GOOD_THINGS);
 _record_actions(-1, @BAD_THINGS);
 
-my @TOP_TEN    = (reverse @GOOD_THINGS)[0..9];
-my @BOTTOM_TEN = (reverse @BAD_THINGS )[0..9];
+my $i = 12;
+my @TOP_TEN    = map {[$_, $i--]} (reverse @GOOD_THINGS)[0..9];
+my $i = -11;
+my @BOTTOM_TEN = map {[$_, $i++]} (reverse @BAD_THINGS )[0..9];
 
 # make sure we die when given bad input
 throws_ok { $schema->highest(10, -2) }
