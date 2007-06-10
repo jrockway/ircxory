@@ -4,36 +4,11 @@
 use strict;
 use warnings;
 use Test::More tests => 15;
-use YAML;
-use Directory::Scratch;
-use App::Ircxory::Schema;
 use App::Ircxory::Robot::Action;
+use App::Ircxory::Test::Database;
 
-# setup database
-my $tmp = Directory::Scratch->new;
-my $db  = $tmp->touch('database');
-
-my $schema = App::Ircxory::Schema->connect("DBI:SQLite:$db");
-$schema->deploy;
-
-# read test fixtures from __END__
-my $data = do { local $/; <DATA> };
-$data = YAML::Load($data);
-
-# INSERT fixtures INTO database
-foreach my $table (keys %$data) {
-    my $rs   = $schema->resultset($table);
-    my @cols = @{$data->{$table}{columns}};
-    
-    foreach my $row (@{$data->{$table}{data}}) {
-        my $i = 0;
-        my $r = {};
-        foreach my $col (@cols) {
-            $r->{$col} = $row->[$i++];
-        }
-        $rs->create($r);
-    }
-}
+my $schema = App::Ircxory::Test::Database->connect;
+$schema->populate(<DATA>);
 
 # do tests
 sub kf {
