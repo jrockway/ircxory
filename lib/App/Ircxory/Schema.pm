@@ -228,5 +228,27 @@ sub highest {
     return @result;
 }
 
+=head2 everything
+
+Returns a list of (thing, points) tuples for every thing in the
+database.
+
+=cut
+
+sub everything {
+    my $schema = shift;
+    
+    my @rs = $schema->resultset('Opinions')->
+      search({},
+             { group_by => 'tid',
+               order_by => 'points DESC',
+               select   => ['tid', {SUM => 'points'}],
+               as       => ['tid', 'points'],
+             }
+            );
+    
+    return map {[$_->thing->thing, $_->get_column('points')]} @rs;
+}
+
 1;
 
