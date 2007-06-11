@@ -6,6 +6,12 @@ use warnings;
 
 use base 'Catalyst::Controller';
 
+sub all_things :Path Args(0) {
+    my ($self, $c) = @_;
+    $c->stash(template   => 'things.tt2');
+    $c->stash(everything => [$c->model('DBIC')->everything]);
+}
+
 sub one_thing :Path Args(1) {
     my ($self, $c, $thing) = @_;
     my $m = $c->model('DBIC');
