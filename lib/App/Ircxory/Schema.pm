@@ -240,14 +240,15 @@ sub everything {
     
     my @rs = $schema->resultset('Opinions')->
       search({},
-             { group_by => 'tid',
-               order_by => 'points DESC',
-               select   => ['tid', {SUM => 'points'}],
-               as       => ['tid', 'points'],
+             { join     => 'thing',
+               group_by => 'thing.thing',
+               order_by => 'SUM(points) DESC',
+               select   => ['thing.thing', {SUM => 'points'}],
+               as       => ['thing', 'points'],
              }
             );
     
-    return map {[$_->thing->thing, $_->get_column('points')]} @rs;
+    return map {[$_->get_column('thing'), $_->get_column('points')]} @rs;
 }
 
 1;
