@@ -1,13 +1,13 @@
 [% PROCESS thing_macros.tt2 %]
-<div class="pair">
+<div class="pair clearfix">
   <h2>[% title | html %]</h2>
-  <div class="left">
+  <div class="box left">
     <h3>[% left_title | html %]</h3>
-    [% list_things(left) %]
+    [% list_things(left,left_more) %]
   </div>
-  <div class="right">
+  <div class="box right">
     <h3>[% right_title | html %]</h3>
-    [% list_things(right) %]
+    [% list_things(right,right_more) %]
   </div>
   <br class="clear" />
 </div>

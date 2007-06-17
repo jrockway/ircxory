@@ -3,8 +3,10 @@
    title='By Score' 
      left_title = 'Ten Best Things' 
        left = top_ten
+       left_more = c.uri_for('/things')
      right_title = 'Ten Worst Things'  
-     right = bottom_ten 
+       right = bottom_ten 
+       right_more = c.uri_for('/things')
 %]
 
 <p>Want to voice your own opinion?  Connect to irc.perl.org and join

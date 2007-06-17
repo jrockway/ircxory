@@ -23,7 +23,7 @@
 [% END %]
 
 [% # transform a list of [thing, score] tuples into HTML %]
-[% MACRO list_things(key) BLOCK %]
+[% MACRO list_things(key,more) BLOCK %]
 <ul>
   [% FOREACH row = key %]
   <li>
@@ -31,5 +31,6 @@
     [% score(row.1) %]
   </li>
   [% END %]
+  <li><a href="[% more | html %]">More...</a></li>
 </ul>
 [% END %]
