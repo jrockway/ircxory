@@ -20,7 +20,7 @@ a.thing {
     margin: 0; 
     padding: 0; 
 }
-.pair .box   {
+.box   {
     width: 14em; 
 }
 .pair .left  {
@@ -36,4 +36,8 @@ a.thing {
     height: 0px;
     clear: both;
     visibility: hidden;
+}
+
+#logos img {
+    border: none;
 }

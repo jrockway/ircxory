@@ -10,5 +10,11 @@
   <body>
     <h1><a href="[% c.uri_for('/') | html %]">Ircxory</a></h1>
     [% content %]
+    <div id="logos">
+      <a href="http://www.catalystframework.org/">
+        <img src="[% c.base %]static/btn_120x50_built.png" 
+             alt="Built with Catalyst" />
+      </a>
+    </div>
   </body>
 </html>
