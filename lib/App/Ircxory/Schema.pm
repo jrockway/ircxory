@@ -123,28 +123,5 @@ sub karma_for {
     return $col->sum || 0;
 }
 
-=head2 everything
-
-Returns a list of (thing, points) tuples for every thing in the
-database.
-
-=cut
-
-sub everything {
-    my $schema = shift;
-    
-    my @rs = $schema->resultset('Opinions')->
-      search({},
-             { join     => 'thing',
-               group_by => 'thing.thing',
-               order_by => 'SUM(points) DESC',
-               select   => ['thing.thing', {SUM => 'points'}],
-               as       => ['thing', 'points'],
-             }
-            );
-    
-    return map {[$_->get_column('thing'), $_->get_column('points')]} @rs;
-}
-
 1;
 

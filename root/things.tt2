@@ -2,6 +2,6 @@
 <h2>Every Thing</h2>
 [% PROCESS thing_macros.tt2 %]
 [% FOREACH row = everything %]
-<p>[% thing(row.0) %] [% score(row.1) %]</p>
+<p>[% thing(row.thing) %] [% score(row.total_points) %]</p>
 [% END %]
 [% END %]

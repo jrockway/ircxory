@@ -9,7 +9,11 @@ use base 'Catalyst::Controller';
 sub all_things :Path Args(0) {
     my ($self, $c) = @_;
     $c->stash(template   => 'things.tt2');
-    $c->stash(everything => [$c->model('DBIC')->everything]);
+    $c->stash(everything => [
+                             $c->model('DBIC::Things')->
+                               everything({},{ order_by => 
+                                               'SUM(opinions.points) DESC'})
+                            ]);
 }
 
 sub one_thing :Path Args(1) {

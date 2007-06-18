@@ -33,5 +33,8 @@ $schema->record(App::Ircxory::Robot::Action->
   for @RECORDS;
 
 
-my @everything = $schema->everything;
-is_deeply(\@everything, \@EXPECT, 'got expected everything');
+my @everything = map {[ $_->thing, $_->total_points ]} 
+  $schema->resultset('Things')->all;
+is_deeply([sort {$a->[0] cmp $b->[0]} @everything], 
+          [sort {$a->[0] cmp $b->[0]} @EXPECT], 
+          'got expected everything');

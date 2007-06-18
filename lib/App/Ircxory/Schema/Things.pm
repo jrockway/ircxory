@@ -25,6 +25,23 @@ __PACKAGE__->has_many(
   { "foreign.tid" => "self.tid" },
 );
 
+=head2 total_points 
+
+Return the sum of opinion points for a row in a Thing-containing resultset
+
+=cut
+
+sub total_points {
+    my $self = shift;
+
+    # if we've joined this in, use the version we already have
+    my $fast = eval { $self->get_column('total_points') };
+    return $fast if defined $fast;
+    
+    # if it's not there, compute it with another SQL query
+    return $self->opinions->get_column('points')->sum;
+}
+
 =head2 reasons_for($thing)
 
 Return a resultset of opinions relating to C<$thing>.
@@ -38,6 +55,26 @@ sub reasons_for :ResultSet {
     return $self->
       search({ thing => $thing })->
         search_related(opinions => {reason => {'<>' => q{}}});
+}
+
+=head2 everything
+
+Return everything, but also join in sum(points) to save hundreds
+of queries
+
+=cut
+
+sub everything :ResultSet {
+    my $self  = shift;
+    my $query = shift || {};
+    my $attrs = shift || {};
+    
+    return $self->search($query, { '+select' => { SUM => 'opinions.points' },
+                                   '+as'     => 'total_points',
+                                   join      => 'opinions',
+                                   group_by  => 'opinions.tid',
+                                   %$attrs,
+                                 });
 }
 
 1;
