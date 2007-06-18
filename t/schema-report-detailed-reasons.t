@@ -15,7 +15,8 @@ my @REASONS = ( [ 'test', 'jrockway', 1 ],
 my $schema = App::Ircxory::Test::Database->connect;
 _record_reasons('testing', @REASONS);
 
-my @res = $schema->detailed_reasons_for('testing');
+my @res = map { [$_->reason, $_->person, $_->points] }
+  $schema->resultset('Things')->reasons_for('testing');
 
 is_deeply([sort {$a->[0] cmp $b->[0]} @res],
           [sort {$a->[0] cmp $b->[0]} @REASONS],
@@ -27,12 +28,12 @@ sub _record_reasons {
     foreach (@reasons) {
         my ($reason, $person, $points) = @{$_};
         my $action = App::Ircxory::Robot::Action->
-          new({ who       => "$person!~$person\@$person",
-                message   => qq{$thing # $reason},
-                word      => $thing,
-                points    => $points,
-                reason    => $reason,
-                channel   => '#plusplus',
+          new({ who      =>"$person!~$person\@$person",
+                message  =>qq{$thing # $reason},
+                word     =>$thing,
+                points   =>$points,
+                reason   =>$reason,
+                channel  =>'#plusplus',
               });
         $schema->record($action);
     }

@@ -24,10 +24,10 @@ sub one_thing :Path Args(1) {
     $c->stash(downs    => $m->karma_for($thing, -1));
 
     # detailed reasons
-    my @reasons = $m->detailed_reasons_for($thing);
-    my @up_r = grep { $_->[2] >  0 } @reasons;
-    my @dn_r = grep { $_->[2] <  0 } @reasons;
-    my @nu_r = grep { $_->[2] == 0 } @reasons;
+    my @reasons = $c->model('DBIC::Things')->reasons_for($thing);
+    my @up_r = grep { $_->points >  0 } @reasons;
+    my @dn_r = grep { $_->points <  0 } @reasons;
+    my @nu_r = grep { $_->points == 0 } @reasons;
     
     $c->stash(up_reasons      => \@up_r);
     $c->stash(down_reasons    => \@dn_r);

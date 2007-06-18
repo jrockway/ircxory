@@ -7,7 +7,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("PK::Auto", "Core");
+__PACKAGE__->load_components("ResultSetManager", "PK::Auto", "Core");
 __PACKAGE__->table("things");
 __PACKAGE__->add_columns(
   "tid",
@@ -24,6 +24,21 @@ __PACKAGE__->has_many(
   "App::Ircxory::Schema::Opinions",
   { "foreign.tid" => "self.tid" },
 );
+
+=head2 reasons_for($thing)
+
+Return a resultset of opinions relating to C<$thing>.
+
+=cut
+
+sub reasons_for :ResultSet {
+    my $self   = shift;
+    my $thing  = shift;
+    
+    return $self->
+      search({ thing => $thing })->
+        search_related(opinions => {reason => {'<>' => q{}}});
+}
 
 1;
 

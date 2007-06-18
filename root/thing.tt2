@@ -1,11 +1,11 @@
 [% WRAPPER wrapper.tt2 %]
 [% PROCESS thing_macros.tt2 %]
-[% MACRO list_reasons(reasons) BLOCK %]
-  [% FOREACH reason = reasons %]
+[% MACRO list_reasons(opinions) BLOCK %]
+  [% FOREACH opinion = opinions %]
   <div class="reason">
-  [% person(reason.1) %] says...
+  [% person(opinion.person) %] says...
    <p>
-     "[% reason.0 %]"
+     "[% opinion.reason | html %]"
    </p>
   </div>
   [% END %]

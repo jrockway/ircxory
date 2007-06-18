@@ -158,34 +158,6 @@ sub reasons_for {
     return uniq @reasons;
 }
 
-=head2 detailed_reasons_for($thing)
-
-Returns a list of [reason, person, points] tuples.
-
-=cut
-
-sub detailed_reasons_for {
-    my $schema = shift;
-    my $thing  = shift;
-    
-    my $rs = $schema->resultset('Opinions')->
-      search({ 'thing.thing' => lc $thing,
-               reason        => {'<>', ""},
-             },
-             { join            => ['thing'],
-             });
-
-    my @result;
-    while (my $row = $rs->next) {
-        push @result, [$row->reason, 
-                       $row->nickname->person->name, 
-                       $row->points];
-    }
-    return @result;
-
-}
-
-
 =head2 everything
 
 Returns a list of (thing, points) tuples for every thing in the
