@@ -7,7 +7,6 @@ use Catalyst qw(Static::Simple ConfigLoader Unicode);
 our $VERSION = '0.01';
 __PACKAGE__->config({ default_view => 'App::Ircxory::View::TT',
                       name         => 'Ircxory',
-                      file         => 'app_ircxory_config.yml',
                     });
 __PACKAGE__->setup;
 
