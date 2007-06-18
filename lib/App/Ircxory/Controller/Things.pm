@@ -26,7 +26,10 @@ sub one_thing :Path Args(1) {
     $c->stash(points   => $m->karma_for($thing));
     $c->stash(ups      => $m->karma_for($thing, 1));
     $c->stash(downs    => $m->karma_for($thing, -1));
-
+    $c->stash(person   => $m->resultset('People')->
+              find({ name => $thing}, { key => 'nickname' })
+             );
+    
     # detailed reasons
     my @reasons = $c->model('DBIC::Things')->reasons_for($thing);
     my @up_r = grep { $_->points >  0 } @reasons;

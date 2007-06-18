@@ -16,6 +16,10 @@ being upmodded [% score(ups) %] times and downmodded
 <span class="negative_score">[% downs | html %]</span> times.
 </p>
 
+[% IF c.stash.person %]
+<p>[% person(c.stash.thing) %] is also a person!</p>
+[% END %]
+
 [% IF up_reasons.size > 0 %]
 <h3>Reasons why [% c.stash.thing | html %] is loved</h3>
 [% list_reasons(up_reasons) %]
