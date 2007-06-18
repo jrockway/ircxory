@@ -25,7 +25,7 @@ $i = -11;
 my @BOTTOM_TEN = map {[$_, $i++]} (reverse @BAD_THINGS )[0..9];
 
 sub highest {
-    map { [$_->thing->thing, $_->total_points] }
+    map { [$_->thing_name, $_->total_points] }
       $schema->resultset('Opinions')->highest_rated(@_);
 }
 
@@ -49,12 +49,12 @@ is_deeply(\@topnine, [@TOP_TEN[0..8]], 'got top nine');
 my @botfour = highest(4, -1);
 is_deeply(\@botfour, [@BOTTOM_TEN[0..3]], 'got bottom four');
 
-my @lowfour = map {[ $_->thing->thing, $_->total_points ]} 
+my @lowfour = map {[ $_->thing_name, $_->total_points ]} 
   $schema->resultset('Opinions')->lowest_rated(4);
 
 is_deeply(\@botfour, [@BOTTOM_TEN[0..3]], 'got lowest four');
 
-my @lowten = map {[ $_->thing->thing, $_->total_points ]} 
+my @lowten = map {[ $_->thing_name, $_->total_points ]} 
   $schema->resultset('Opinions')->lowest_rated();
 
 is_deeply(\@botten, \@BOTTOM_TEN, 'got lowest ten');

@@ -5,7 +5,7 @@ package App::Ircxory::Schema::Opinions;
 use strict;
 use warnings;
 use Carp;
-
+use Readonly;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("ResultSetManager", "PK::Auto", "Core");
@@ -31,6 +31,39 @@ __PACKAGE__->belongs_to("nickname", "App::Ircxory::Schema::Nicknames", { nid => 
 __PACKAGE__->belongs_to("thing", "App::Ircxory::Schema::Things", { tid => "tid" });
 __PACKAGE__->belongs_to("channel", "App::Ircxory::Schema::Channels", { cid => "cid" });
 
+=head1 EXTRA ACCESSORS
+
+=head2 person
+
+Returns nickname->person->name.
+
+=cut
+
+sub person {
+    return $_[0]->nickname->person->name;
+}
+
+=head2 total_points
+
+Resultsets that group by "thing" will make the sum of points
+available here.
+
+=cut
+
+__PACKAGE__->mk_group_accessors(column => 'total_points');
+
+=head2 thing_name
+
+Returns thing->thing, the name of the "thing".
+
+=cut
+
+sub thing_name {
+    return $_[0]->thing->thing;
+}
+
+=head1 CUSTOM RESULTSETS
+
 =head2 highest_rated([$how_many [, $multiplier]])
 
 Returns a resultset page of C<$how_many> highest rated items, or 10 if
@@ -48,10 +81,11 @@ From there:
    say $first->thing->thing. ' has '. $first->total_points. ' points';
 
 =cut
+Readonly my $RESULTS_PER_PAGE => 10;
 
 sub highest_rated :ResultSet {
     my $self  = shift;
-    my $count = shift || 10;
+    my $count = shift || $RESULTS_PER_PAGE;
     my $mult  = shift || 1;
     
     croak "bad multiplier $mult; use 1 or -1"
@@ -76,10 +110,11 @@ Abbreviation for highest_rated($how_many, -1)
 =cut
 
 sub lowest_rated :ResultSet {
-    shift->highest_rated((shift||10), -1);
+    shift->highest_rated((shift || $RESULTS_PER_PAGE ), -1);
 }
 
-      
-__PACKAGE__->mk_group_accessors(column => 'total_points');
+=head2 reasons_for(
+
+=cut
 
 1;
