@@ -12,9 +12,9 @@ sub main : Path Args(0) {
     $c->stash(template => 'index.tt2');
     
     # highest/lowest by score
-    $c->stash(top_ten    => [$c->model('DBIC')->highest(10)]);
-    $c->stash(bottom_ten => [$c->model('DBIC')->highest(10, -1)]);
-
+    $c->stash(top_ten    => [$c->model('DBIC::Opinions')->highest_rated]);
+    $c->stash(bottom_ten => [$c->model('DBIC::Opinions')->lowest_rated ]);
+    
     # list of joined channels for ircxory info page
     my @channels = @{$c->config->{bot}{channels}||[]};
     my $last     = pop @channels if @channels > 1;

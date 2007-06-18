@@ -27,8 +27,8 @@
 <ul>
   [% FOREACH row = key %]
   <li>
-    [% thing(row.0) %]
-    [% score(row.1) %]
+    [% thing(row.thing.thing) %]
+    [% score(row.total_points) %]
   </li>
   [% END %]
   <li><a href="[% more | html %]">More...</a></li>

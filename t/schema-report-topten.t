@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use App::Ircxory::Test::Database;
 use Test::Exception;
 
@@ -24,26 +24,41 @@ my @TOP_TEN    = map {[$_, $i--]} (reverse @GOOD_THINGS)[0..9];
 $i = -11;
 my @BOTTOM_TEN = map {[$_, $i++]} (reverse @BAD_THINGS )[0..9];
 
+sub highest {
+    map { [$_->thing->thing, $_->total_points] }
+      $schema->resultset('Opinions')->highest_rated(@_);
+}
+
 # make sure we die when given bad input
-throws_ok { $schema->highest(10, -2) }
+throws_ok { highest(10, -2) }
   qr/bad multiplier/,
   '-2 is not a valid multiplier';
 
-lives_ok { $schema->highest(10, -1) }
+lives_ok { highest(10, -1) }
   'bottom 10 is legal';
 
-
-my @topten = $schema->highest();
+my @topten = highest();
 is_deeply(\@topten, \@TOP_TEN, 'got top ten');
 
-my @botten = $schema->highest(10, -1);
+my @botten = highest(10, -1);
 is_deeply(\@botten, \@BOTTOM_TEN, 'got bottom ten');
 
-my @topnine = $schema->highest(9);
+my @topnine = highest(9);
 is_deeply(\@topnine, [@TOP_TEN[0..8]], 'got top nine');
 
-my @botfour = $schema->highest(4, -1);
+my @botfour = highest(4, -1);
 is_deeply(\@botfour, [@BOTTOM_TEN[0..3]], 'got bottom four');
+
+my @lowfour = map {[ $_->thing->thing, $_->total_points ]} 
+  $schema->resultset('Opinions')->lowest_rated(4);
+
+is_deeply(\@botfour, [@BOTTOM_TEN[0..3]], 'got lowest four');
+
+my @lowten = map {[ $_->thing->thing, $_->total_points ]} 
+  $schema->resultset('Opinions')->lowest_rated();
+
+is_deeply(\@botten, \@BOTTOM_TEN, 'got lowest ten');
+
 
 # add elements in an array with $points.  the first
 # element is added once, the second twice, etc.

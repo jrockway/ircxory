@@ -185,48 +185,6 @@ sub detailed_reasons_for {
 
 }
 
-=head2 highest([$how_many [, $multiplier]])
-
-Returns a list of C<$how_many> highest rated items, or 10 if not
-specified.  If C<$multiplier> is C<-1>, then the lowest-rated items
-are returned instead.  (C<$multiplier> defaults to 1.)
-
-   my @top_ten = $schema->highest();
-   my @bot_ten = $schema->highest(10, -1);
-
-   my @top_40  = $schema->highest(40);
-   ...
-
-The results are returned as a list of [thing, points] tuples.
-
-=cut
-
-sub highest {
-    my $schema = shift;
-    my $count  = shift || 10;
-    my $mult   = shift || 1;
-    
-    croak "bad multiplier $mult; use 1 or -1"
-      if $mult != -1 && $mult != 1;
-    
-    my $sort = $mult > 0 ? 'DESC' : 'ASC';
-
-    my $rs = $schema->resultset('Opinions')->
-      search({},
-             { select    => ['thing', { SUM => 'points'}],
-               as        => [qw/thing tot/],
-               join      => ['thing'],
-               group_by  => 'thing',
-               order_by  => "SUM(points) $sort",
-               rows      => $count,
-               page      => 1,
-             });
-    my @result;
-    while (my $row = $rs->next) {
-        push @result, [$row->get_column('thing'), $row->get_column('tot')];
-    }
-    return @result;
-}
 
 =head2 everything
 
