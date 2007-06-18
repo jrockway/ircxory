@@ -24,7 +24,7 @@ Load the config hash into memory
 
 sub load {
     my $class = shift; # don't care
-    my $file  = "$Bin/../app_ircxory_config.yml";
+    my $file  = "$Bin/../app_ircxory.yml";
 
     return YAML::LoadFile($file);
 }
