@@ -31,6 +31,8 @@
     [% score(row.total_points) %]
   </li>
   [% END %]
+  [% IF more %]
   <li><a href="[% more | html %]">More...</a></li>
+  [% END %]
 </ul>
 [% END %]

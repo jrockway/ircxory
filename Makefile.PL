@@ -20,6 +20,7 @@ requires 'Readonly';
 requires 'List::Util';
 requires 'List::MoreUtils';
 requires 'Carp';
+requires 'Catalyst::Controller::BindLex';
 
 build_requires 'Test::More';
 build_requires 'ok';

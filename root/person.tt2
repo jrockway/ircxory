@@ -1,0 +1,16 @@
+[% WRAPPER wrapper.tt2 %]
+[% PROCESS thing_macros.tt2 %]
+[% IF c.stash.person %]
+[% INCLUDE pair.tt2
+   title= c.stash.person.name _ "'s Notables" 
+     left_title = 'Ten Best Things' 
+       left = high
+     right_title = 'Ten Worst Things'  
+       right = low
+%]
+[% ELSE %]
+<h2>No such person</h2>
+<a href="[% c.uri_for('/people') | html %]">
+Try looking for someone else.</a>
+[% END %]
+[% END %]
