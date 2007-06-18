@@ -6,9 +6,11 @@ use warnings;
 use Test::More tests => 27;
 use App::Ircxory::Robot::Action;
 use App::Ircxory::Test::Database;
+use App::Ircxory::Robot::Model;
 
 my $schema = App::Ircxory::Test::Database->connect;
 $schema->populate(<DATA>);
+bless $schema => 'App::Ircxory::Robot::Model';
 
 # do tests
 sub kf {

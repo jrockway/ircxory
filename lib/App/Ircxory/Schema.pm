@@ -3,7 +3,6 @@ package App::Ircxory::Schema;
 use strict;
 use warnings;
 use App::Ircxory::Robot::Parser;
-use List::MoreUtils qw(uniq);
 use Carp;
 
 use base 'DBIx::Class::Schema';
@@ -122,40 +121,6 @@ sub karma_for {
         return $col->func('count');
     }
     return $col->sum || 0;
-}
-
-
-=head2 reasons_for($thing, [$good])
-
-Returns a list of reasons why a certian thing was karama'd.  If
-good is 1, then only ++s will be shown; if good is -1, then only --s
-will be returned.
-
-=cut
-
-sub reasons_for {
-    my $schema = shift;
-    my $thing  = shift;
-    my $good   = shift;
-    
-    my @points;
-    if (defined $good && $good == -1) {
-        @points = ('points' => {'<=', -1});
-    }
-    elsif (defined $good && $good == 1) {
-        @points = ('points' => {'>=', 1});
-    }
-    
-    my @reasons = $schema->resultset('Opinions')->
-      search({ 'thing.thing' => lc $thing,
-               reason        => {'<>', ""},
-               @points,
-             },
-             { include_columns => 'thing.thing',
-               join            => ['thing'],
-             })->get_column('reason')->all;
-    
-    return uniq @reasons;
 }
 
 =head2 everything
