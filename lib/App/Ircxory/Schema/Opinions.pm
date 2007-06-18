@@ -110,11 +110,7 @@ Abbreviation for highest_rated($how_many, -1)
 =cut
 
 sub lowest_rated :ResultSet {
-    shift->highest_rated((shift || $RESULTS_PER_PAGE ), -1);
+    shift->highest_rated(shift(), -1);
 }
-
-=head2 reasons_for(
-
-=cut
 
 1;
