@@ -146,8 +146,12 @@ sub most_controversial :ResultSet {
     
     return
       $self->search({},
-                    { '+select' => [\'ABS(SUM(POINTS)*100)/COUNT(1) co'],
-                      '+as'     => ['controversy'],
+                    { '+select' => [ \'ABS(SUM(points)*100)/COUNT(1) co',
+                                     { SUM => 'points'},
+                                     \'ABS(SUM((POINTS+1)/2))',
+                                     \'ABS(SUM((POINTS-1)/2))',
+                                   ],
+                      '+as'     => [qw/controversy total_points ups downs/],
                       join      => ['opinions'],
                       group_by  => 'me.tid',
                       order_by  => "co $sort",
@@ -175,5 +179,18 @@ Return the controversy "score" from above two reports.
 sub controversy {
     return shift->get_column('controversy');
 }
+
+=head2 downs
+
+count of downmods
+
+=head2 ups
+
+count of upmods
+
+=cut
+
+sub downs { shift->get_column('downs') }
+sub ups   { shift->get_column('ups')   }
 
 1;

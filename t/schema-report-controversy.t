@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 11;
+use Test::More tests => 20;
 use App::Ircxory::Test::Database;
 
 my $s = App::Ircxory::Test::Database->connect;
@@ -33,6 +33,15 @@ is($c[0]->thing, 'baz');
 is($c[1]->thing, 'bar');
 is($c[2]->thing, 'foo');
 ok($c[0]->controversy < $c[1]->controversy, 'make sure there are numbers');
+is($c[0]->ups, 2, 'baz ups');
+is($c[0]->downs, 2, 'baz downs');
+is($c[1]->ups, 2, 'bar ups');
+is($c[1]->downs, 1, 'bar downs');
+is($c[2]->ups, 3, 'foo ups');
+is($c[2]->downs, 0, 'foo downs');
+is($c[0]->total_points, 0, 'total baz');
+is($c[1]->total_points, 1, 'total bar');
+is($c[2]->total_points, 3, 'total foo');
 
 my @d = $s->resultset('Things')->least_controversial->all;
 is($d[0]->thing, 'foo');
