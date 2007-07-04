@@ -156,6 +156,22 @@ sub most_controversial :ResultSet {
                     });
 }
 
+=head2 least_controversial
+
+Reversed.
+
+=cut
+
+sub least_controversial :ResultSet {
+    shift->most_controversial(shift(), -1);
+}
+
+=head2 controversy
+
+Return the controversy "score" from above two reports.
+
+=cut
+
 sub controversy {
     return shift->get_column('controversy');
 }
