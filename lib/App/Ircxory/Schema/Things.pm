@@ -128,5 +128,36 @@ sub lowest_rated :ResultSet {
     shift->highest_rated(shift(), -1);
 }
 
-1;
+=head2 most_controversial
 
+Returns a ResultSet of Things ordered by "controversy".
+
+=cut
+
+sub most_controversial :ResultSet {
+    my $self = shift;
+    my $count = shift || 10;
+    my $mult  = shift || 1;
+    
+    croak "bad multiplier $mult; use 1 or -1"
+      if $mult != -1 && $mult != 1;
+    
+    my $sort = $mult > 0 ? 'ASC' : 'DESC';
+    
+    return
+      $self->search({},
+                    { '+select' => [\'ABS(SUM(POINTS)*100)/COUNT(1) co'],
+                      '+as'     => ['controversy'],
+                      join      => ['opinions'],
+                      group_by  => 'me.tid',
+                      order_by  => "co $sort",
+                      rows      => $count,
+                      page      => 1,
+                    });
+}
+
+sub controversy {
+    return shift->get_column('controversy');
+}
+
+1;
