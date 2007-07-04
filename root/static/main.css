@@ -2,6 +2,8 @@
     background-color: white; 
 }
 
+h2 { margin: 0 }
+
 span.positive_score {
     color: green; 
 }
@@ -36,6 +38,10 @@ a.thing {
     height: 0px;
     clear: both;
     visibility: hidden;
+}
+
+#logos {
+    padding-top: 2em;
 }
 
 #logos img {

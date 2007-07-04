@@ -28,9 +28,13 @@ being upmodded [% score(ups) %] times and downmodded
    width = "50em"
 %]
 
+<div class="pair" style="width: 50em">
+<div class="box" style="padding-left: 13em; padding-right: 13em;">
 [% IF neutral_reasons.size > 0 %]
 <h3>Reasons why [% c.stash.thing | html %] is meh</h3>
 [% list_reasons(neutral_reasons) %]
 [% END %]
+</div>
+</div>
 
 [% END %]
