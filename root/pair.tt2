@@ -1,4 +1,4 @@
-<div class="pair clearfix">
+<div class="pair clearfix" [% IF width %] style="width: [% width %]" [% END %]>
   <h2>[% title | html %]</h2>
   <div class="box left">
     <h3>[% left_title | html %]</h3>

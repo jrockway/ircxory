@@ -3,12 +3,12 @@
 [% MACRO list_reasons(opinions) BLOCK %]
   [% FOREACH opinion = opinions %]
   <div class="reason">
-  [% person(opinion.person) %] says...
-   <p>
-     "[% opinion.reason | html %]"
+   <p>"[% opinion.reason | html %]"
+     <span class="written_by"> --&nbsp;[% person(opinion.person) %]</span>
    </p>
   </div>
   [% END %]
+  [% IF opinions.size < 1 %] <p>None!</p> [% END %]
 [% END %]
 <h2>Information on [% c.stash.thing | html %]</h2>
 <p>[% c.stash.thing | html %] has karma of [% score(points) %] from
@@ -20,15 +20,13 @@ being upmodded [% score(ups) %] times and downmodded
 <p>[% person(c.stash.thing) %] is also a person!</p>
 [% END %]
 
-[% IF up_reasons.size > 0 %]
-<h3>Reasons why [% c.stash.thing | html %] is loved</h3>
-[% list_reasons(up_reasons) %]
-[% END %]
-
-[% IF down_reasons.size > 0 %]
-<h3>Reasons why [% c.stash.thing | html %] is hated</h3>
-[% list_reasons(down_reasons) %]
-[% END %]
+[% INCLUDE pair.tt2
+   left_title  = "Reasons why " _ c.stash.thing _ " is loved"
+   right_title = "Reasons why " _ c.stash.thing _ " is hated"
+   left  = list_reasons(up_reasons)
+   right = list_reasons(down_reasons)
+   width = "50em"
+%]
 
 [% IF neutral_reasons.size > 0 %]
 <h3>Reasons why [% c.stash.thing | html %] is meh</h3>
