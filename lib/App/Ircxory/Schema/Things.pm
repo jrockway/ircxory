@@ -134,51 +134,54 @@ Returns a ResultSet of Things ordered by "controversy".
 
 =cut
 
-sub most_controversial :ResultSet {
-    my $self = shift;
-    my $count = shift || 10;
-    my $mult  = shift || 1;
-    
-    croak "bad multiplier $mult; use 1 or -1"
-      if $mult != -1 && $mult != 1;
-    
-    my $sort = $mult > 0 ? 'ASC' : 'DESC';
-    
-    return
-      $self->search({},
-                    { '+select' => [ \'ABS(SUM(points)*100)/COUNT(1) co',
-                                     { SUM => 'points'},
-                                     \'ABS(SUM((POINTS+1)/2))',
-                                     \'ABS(SUM((POINTS-1)/2))',
-                                   ],
-                      '+as'     => [qw/controversy total_points ups downs/],
-                      join      => ['opinions'],
-                      group_by  => 'me.tid',
-                      order_by  => "co $sort",
-                      rows      => $count,
-                      page      => 1,
-                    });
-}
-
 =head2 least_controversial
 
 Reversed.
 
 =cut
 
+sub most_controversial :ResultSet {
+    my $self  = shift;
+    my $count = shift;
+    my $algo = '-ABS(SUM(points)*1000)/COUNT(1)+COUNT(1)';
+    $self->_controversial($count, $algo, 'DESC');
+}
+
 sub least_controversial :ResultSet {
-    shift->most_controversial(shift(), -1);
+    my $self  = shift;
+    my $count = shift;
+    my $algo = 'COUNT(1)/(ABS(SUM(points))+1)-COUNT(1)';
+    $self->_controversial($count, $algo, 'ASC');
+}
+
+sub _controversial :ResultSet {
+    my $self  = shift;
+    my $count = shift || 10;
+    my $algo  = shift;
+    my $order = shift;
+
+    $algo .= ' co';
+
+    return
+      $self->search({},
+                    { '+select' => [ \$algo,
+                                     { SUM => 'points'},
+                                     \'ABS(SUM((POINTS+1)/2))',
+                                     \'ABS(SUM((POINTS-1)/2))',
+                                     { COUNT => 1 },
+                                   ],
+                      '+as'     => [qw/controversy total_points ups downs c/],
+                      join      => ['opinions'],
+                      group_by  => 'me.tid',
+                      order_by  => "co $order",
+                      rows      => $count,
+                      page      => 1,
+                    });
 }
 
 =head2 controversy
 
 Return the controversy "score" from above two reports.
-
-=cut
-
-sub controversy {
-    return shift->get_column('controversy');
-}
 
 =head2 downs
 
@@ -190,7 +193,8 @@ count of upmods
 
 =cut
 
-sub downs { shift->get_column('downs') }
-sub ups   { shift->get_column('ups')   }
+sub controversy { shift->get_column('controversy') }
+sub downs       { shift->get_column('downs')       }
+sub ups         { shift->get_column('ups')         }
 
 1;
