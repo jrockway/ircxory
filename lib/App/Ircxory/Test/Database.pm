@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use Directory::Scratch;
 use YAML;
+use App::Ircxory::Robot::Parser;
+use Regexp::Common qw/balanced/;
 
 use base 'App::Ircxory::Schema';
 
@@ -81,6 +83,30 @@ sub populate {
             $rs->create($r);
         }
     }
+}
+
+=head1 add_test_record($string, [$person, [$channel]])
+
+Parse a string like it's an IRC message and add to the database
+
+=cut
+
+sub add_test_record {
+    my $schema = shift;
+    my $what   = shift;
+    my $who    = shift || 'jrockway!~jrockway@foo.jrock.us';
+    my $where  = shift || '#test';
+
+    my $action = App::Ircxory::Robot::Parser::_parse_karma($who, $where, $what);
+    
+    if ($action) {
+        $schema->record($action);
+    }
+    else {
+        die 'parse error';
+    }
+
+    return;
 }
 
 1;
