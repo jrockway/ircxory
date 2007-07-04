@@ -4,6 +4,7 @@ package App::Ircxory::Schema::Things;
 
 use strict;
 use warnings;
+use Carp;
 
 use base 'DBIx::Class';
 
@@ -42,6 +43,8 @@ sub total_points {
     return $self->opinions->get_column('points')->sum;
 }
 
+=head1 CUSTOM RESULTSETS
+
 =head2 reasons_for($thing)
 
 Return a resultset of opinions relating to C<$thing>.
@@ -75,6 +78,54 @@ sub everything :ResultSet {
                                    group_by  => 'opinions.tid',
                                    %$attrs,
                                  });
+}
+
+=head2 highest_rated([$how_many [, $multiplier]])
+
+Returns a resultset page of C<$how_many> highest rated items, or 10 if
+not specified.  If C<$multiplier> is C<-1>, then the lowest-rated
+items are returned instead.  (C<$multiplier> defaults to 1.)
+
+   my @top_ten = $schema->resultset('Opinions')->highest_rated();
+   my @bot_ten = $schema->resultset('Opinions')->highest_rated(10, -1);
+   my @top_40  = $schema->resultset('Opinions')->highest_rated(40);
+   ...
+
+From there:
+
+   my $first = @top_ten[0];
+   say $first->thing->thing. ' has '. $first->total_points. ' points';
+
+=cut
+
+sub highest_rated :ResultSet {
+    my $self  = shift;
+    my $count = shift || 10;
+    my $mult  = shift || 1;
+    
+    croak "bad multiplier $mult; use 1 or -1"
+      if $mult != -1 && $mult != 1;
+    
+    my $sort = $mult > 0 ? 'DESC' : 'ASC';
+    return $self->search({},
+                         { '+select' => [{ SUM => 'opinions.points'}],
+                           '+as'     => [qw/total_points/],
+                           join      => ['opinions'],
+                           group_by  => 'me.tid',
+                           order_by  => "SUM(opinions.points) $sort",
+                           rows      => $count,
+                           page      => 1,
+                         });
+}
+
+=head2 lowest_rated([$how_many])
+
+Abbreviation for highest_rated($how_many, -1)
+
+=cut
+
+sub lowest_rated :ResultSet {
+    shift->highest_rated(shift(), -1);
 }
 
 1;

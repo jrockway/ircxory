@@ -15,17 +15,27 @@ sub everyone :Path :Args(0) {
 
 sub one_person :Path :Args(1) {
     my ($self, $c, $name) = @_;
-
-    my $person :Stashed = $c->model('DBIC::People')->
-      find($name, {key => 'nickname'});
     
     $c->stash(template => 'person.tt2');
+
+    # find who we're looking for
+    my $person :Stashed = $c->model('DBIC::People')->
+      find($name, {key => 'nickname'});
+
+    $c->detach('/error_404', [qq{No such person "$name"}]) unless $person;
     
-    my @high :Stashed = 
-      $person->nicknames->search_related('opinions')->highest_rated;
-    my @low  :Stashed = 
-      $person->nicknames->search_related('opinions')->lowest_rated;
+    # get nicknames
+    my $nickids = [$person->nicknames->get_column('nid')->all];
+    my @cond    = ( { 'opinions.nid' => 
+                      { -in => $nickids },
+                    },
+                    { join => 'opinions' }
+                  );
     
+    # and do the search for things' scores
+    my $t = $c->model('DBIC::Things');
+    my @high :Stashed = $t->highest_rated->search(@cond);
+    my @low  :Stashed = $t->lowest_rated->search(@cond);
 }
 
 1;

@@ -27,7 +27,7 @@
 <ul>
   [% FOREACH row = key %]
   <li>
-    [% thing(row.thing_name) %]
+    [% thing(row.thing) %]
     [% score(row.total_points) %]
   </li>
   [% END %]
