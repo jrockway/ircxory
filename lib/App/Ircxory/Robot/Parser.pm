@@ -97,7 +97,16 @@ sub parse {
                   channel   => $where,
                 });
       }
+
+    my $karma_result = _parse_karma($who, $where, $what);
+    return $karma_result if $karma_result;
     
+    return;
+}
+
+# needed by TestDatabase
+sub _parse_karma {
+    my ($who, $where, $what) = @_;
     my $parens =  $RE{balanced}{-parens=>'(){}[]<>'}{-keep};
     if ($what =~ /(?:                   # what we're voting on:
                       $parens           # something in parens
@@ -139,7 +148,6 @@ sub parse {
                  message => $what,
                 });
       }
-    
     return;
 }
 
