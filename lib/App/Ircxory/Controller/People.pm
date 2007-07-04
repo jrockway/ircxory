@@ -25,7 +25,8 @@ sub one_person :Path :Args(1) {
     $c->detach('/error_404', [qq{No such person "$name"}]) unless $person;
     
     # get nicknames
-    my $nickids = [$person->nicknames->get_column('nid')->all];
+    my $nicknames :Stashed = $person->nicknames;
+    my $nickids = [$nicknames->get_column('nid')->all];
     my @cond    = ( { 'opinions.nid' => 
                       { -in => $nickids },
                     },

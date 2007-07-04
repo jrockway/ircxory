@@ -1,6 +1,5 @@
 [% WRAPPER wrapper.tt2 %]
 [% PROCESS thing_macros.tt2 %]
-[% IF c.stash.person %]
 [% INCLUDE pair.tt2
    title= c.stash.person.name _ "'s Notables" 
      left_title = 'Ten Best Things' 
@@ -8,9 +7,15 @@
      right_title = 'Ten Worst Things'  
        right = list_things(low)
 %]
-[% ELSE %]
-<h2>No such person</h2>
-<a href="[% c.uri_for('/people') | html %]">
-Try looking for someone else.</a>
+<h2>Known aliases</h2>
+<table>
+<tr><th>user</th><th>nick</th><th>host</th></tr>
+[% WHILE (nick = nicknames.next) %]
+<tr>
+  <td>[% nick.username | html %]</td>
+  <td>[% person(nick.nick)    %]</td>
+  <td>[% nick.host     | html %]</td>
+</tr>
 [% END %]
+</table>
 [% END %]
