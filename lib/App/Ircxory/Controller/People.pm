@@ -9,7 +9,7 @@ use base 'Catalyst::Controller::BindLex';
 
 sub everyone :Path :Args(0) {
     my ($self, $c) = @_;
-    my @people :Stashed = $c->model('DBIC::People')->all;
+    my $people :Stashed = $c->model('DBIC::People');
     $c->stash(template => 'people.tt2');
 }
 

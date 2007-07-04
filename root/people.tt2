@@ -2,7 +2,7 @@
 [% PROCESS thing_macros.tt2 %]
 <h2>Everyone</h2>
 <ul>
-[% FOREACH the_person IN people %]
+[% WHILE (the_person = people.next) %]
 <li>[% person(the_person.name) %]</li>
 [% END %]
 </ul>
