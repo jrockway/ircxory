@@ -1,0 +1,9 @@
+[% WRAPPER wrapper.tt2 %]
+[% PROCESS thing_macros.tt2 %]
+<h2>Everyone</h2>
+<ul>
+[% FOREACH the_person IN people %]
+<li>[% person(the_person.name) %]</li>
+[% END %]
+</ul>
+[% END %]

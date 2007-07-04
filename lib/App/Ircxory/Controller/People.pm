@@ -7,6 +7,12 @@ use warnings;
 
 use base 'Catalyst::Controller::BindLex';
 
+sub everyone :Path :Args(0) {
+    my ($self, $c) = @_;
+    my @people :Stashed = $c->model('DBIC::People')->all;
+    $c->stash(template => 'people.tt2');
+}
+
 sub one_person :Path :Args(1) {
     my ($self, $c, $name) = @_;
 
