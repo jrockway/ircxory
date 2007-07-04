@@ -3,8 +3,8 @@
 [% MACRO list_reasons(opinions) BLOCK %]
   [% FOREACH opinion = opinions %]
   <div class="reason">
-   <p>"[% opinion.reason | html %]"
-     <span class="written_by"> --&nbsp;[% person(opinion.person) %]</span>
+   <p><span class="opinion_reason">[% opinion.reason | html %]</span>
+     <span class="written_by">[% person(opinion.person) %]</span>
    </p>
   </div>
   [% END %]

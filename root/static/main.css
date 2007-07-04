@@ -41,3 +41,17 @@ a.thing {
 #logos img {
     border: none;
 }
+
+.written_by:before {
+   content: "--";
+}
+.written_by {
+   font-size: 85%;
+}
+
+.opinion_reason:before {
+   content: "\"";
+}
+.opinion_reason:after {
+   content: "\"";
+}
