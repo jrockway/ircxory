@@ -1,12 +1,11 @@
 [% WRAPPER wrapper.tt2  %]
+[% PROCESS thing_macros.tt2 %]
 [% INCLUDE pair.tt2
    title='By Score' 
      left_title = 'Ten Best Things' 
-       left = top_ten
-       left_more = c.uri_for('/things')
+       left = list_things(top_ten,c.uri_for('/things'))
      right_title = 'Ten Worst Things'  
-       right = bottom_ten 
-       right_more = c.uri_for('/things')
+       right = list_things(bottom_ten,c.uri_for('/things'))
 %]
 
 <p>Want to voice your own opinion?  Connect to irc.perl.org and join
