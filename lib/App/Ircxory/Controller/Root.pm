@@ -14,6 +14,12 @@ sub main : Path Args(0) {
     # highest/lowest by score
     $c->stash(top_ten    => [$c->model('DBIC::Things')->highest_rated]);
     $c->stash(bottom_ten => [$c->model('DBIC::Things')->lowest_rated ]);
+
+    # controversy
+    $c->stash(most_controversial => 
+              [$c->model('DBIC::Things')->most_controversial]);
+    $c->stash(least_controversial => 
+              [$c->model('DBIC::Things')->least_controversial]);
     
     # list of joined channels for ircxory info page
     my @channels = @{$c->config->{bot}{channels}||[]};
