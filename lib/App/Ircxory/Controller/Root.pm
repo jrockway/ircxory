@@ -12,8 +12,8 @@ sub main : Path Args(0) {
     $c->stash(template => 'index.tt2');
     
     # highest/lowest by score
-    $c->stash(top_ten    => [$c->model('DBIC::Opinions')->highest_rated]);
-    $c->stash(bottom_ten => [$c->model('DBIC::Opinions')->lowest_rated ]);
+    $c->stash(top_ten    => [$c->model('DBIC::Things')->highest_rated]);
+    $c->stash(bottom_ten => [$c->model('DBIC::Things')->lowest_rated ]);
     
     # list of joined channels for ircxory info page
     my @channels = @{$c->config->{bot}{channels}||[]};
@@ -23,9 +23,18 @@ sub main : Path Args(0) {
     $c->stash(channels  => $channels);
 }
 
+sub error_404 :Private {
+    my ($self, $c, $reason) = @_;
+    $reason ||= 'Not found';
+    $c->stash(reason   => $reason);
+    $c->stash(template => '404.tt2');
+    $c->response->status(404);
+}
+
 sub end : ActionClass(RenderView) {
     my ($self, $c) = @_;
-    $c->response->content_type('application/xhtml+xml; charset=utf-8');
+    $c->response->content_type('application/xhtml+xml; charset=utf-8')
+      if $c->response->content_type =~ /html/;
 }
 
 =head1 NAME

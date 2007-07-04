@@ -1,0 +1,5 @@
+[% WRAPPER wrapper.tt2 %]
+<h2>404 Not Found</h2>
+<p>[% reason | html %]</p>
+<a href="[% c.uri_for('/') %]">Go home</a>?
+[% END %]
