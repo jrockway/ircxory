@@ -49,5 +49,8 @@ my @d = $s->resultset('Things')->least_controversial->all;
 is($d[0]->thing, 'foo', 'foo 1');
 is($d[1]->thing, 'bar', 'bar 2');
 is($d[2]->thing, 'baz', 'baz 3');
+diag join '|', map { $d[$_]->controversy } 0..2;
+diag join '|', map { $c[$_]->controversy } 0..2;
+
 ok($d[0]->controversy < $d[1]->controversy, 'other way');
 ok($d[1]->controversy < $d[2]->controversy, 'other way');
