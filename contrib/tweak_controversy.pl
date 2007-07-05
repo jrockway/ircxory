@@ -11,9 +11,21 @@ use Term::ReadLine;
 my $term   = Term::ReadLine->new($0);
 my $schema = App::Ircxory::Robot::Model->connect;
 
+my $last  = 1;
+my $order = 'DESC';
 while (defined (my $algo = $term->readline('> '))) {
-    exit if $algo =~ /^[.]q(u(i(t)?)?)?$/;
-    my $rs = $schema->resultset('Things')->_controversial(20, $algo, 'DESC');
+    # exit
+    exit if $algo =~ /^q(u(i(t)?)?)?$/;
+    
+    # special commands
+    if ($algo =~ /(?:;|ASC|DESC)/) {
+        $order = 'ASC'  if $algo eq 'ASC';
+        $order = 'DESC' if $algo eq 'DESC';
+        $order = ($order eq 'DESC' ? 'ASC' : 'DESC') if ($algo eq ';');
+        $algo  = $last;
+    }
+    
+    my $rs = $schema->resultset('Things')->_controversial(20, $algo, $order);
     while (my $row = $rs->next) {
         my $thing = $row->thing;
         $thing .= " " x 30;
@@ -22,4 +34,5 @@ while (defined (my $algo = $term->readline('> '))) {
           qw/total_points c controversy/;
         print "\n";
     }
+    $last = $algo;
 }
