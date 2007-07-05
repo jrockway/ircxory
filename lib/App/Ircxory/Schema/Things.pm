@@ -143,14 +143,14 @@ Reversed.
 sub most_controversial :ResultSet {
     my $self  = shift;
     my $count = shift;
-    my $algo = '-ABS(SUM(points)*1000)/COUNT(1)+COUNT(1)';
+    my $algo = '-(ABS(SUM(points))+COUNT(1))/(COUNT(1)+0.1)';
     $self->_controversial($count, $algo, 'DESC');
 }
 
 sub least_controversial :ResultSet {
     my $self  = shift;
     my $count = shift;
-    my $algo = 'ABS(SUM(points))/(COUNT(1)+0.1)';
+    my $algo = '-ABS(SUM(points))/(COUNT(1)+0.8)';
     $self->_controversial($count, $algo, 'ASC');
 }
 
@@ -174,6 +174,7 @@ sub _controversial :ResultSet {
                       join      => ['opinions'],
                       group_by  => 'me.tid',
                       order_by  => "co $order",
+                      having    => "COUNT(1) > 5",
                       rows      => $count,
                       page      => 1,
                     });

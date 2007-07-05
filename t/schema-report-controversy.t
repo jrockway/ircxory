@@ -33,6 +33,7 @@ is($c[0]->thing, 'baz', 'baz 1');
 is($c[1]->thing, 'bar', 'bar 2');
 is($c[2]->thing, 'foo', 'foo 3');
 ok($c[0]->controversy > $c[1]->controversy, 'make sure there are numbers');
+diag join '|', map { $c[$_]->controversy } 0..2;
 
 is($c[0]->ups, 2, 'baz ups');
 is($c[0]->downs, 2, 'baz downs');
@@ -50,7 +51,6 @@ is($d[0]->thing, 'foo', 'foo 1');
 is($d[1]->thing, 'bar', 'bar 2');
 is($d[2]->thing, 'baz', 'baz 3');
 diag join '|', map { $d[$_]->controversy } 0..2;
-diag join '|', map { $c[$_]->controversy } 0..2;
 
 ok($d[0]->controversy < $d[1]->controversy, 'other way');
 ok($d[1]->controversy < $d[2]->controversy, 'other way');
