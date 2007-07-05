@@ -26,10 +26,11 @@ while (defined (my $algo = $term->readline('> '))) {
     }
     
     my $rs = $schema->resultset('Things')->_controversial(20, $algo, $order);
+    print "(sorted $order)\n";
     while (my $row = $rs->next) {
         my $thing = $row->thing;
         $thing .= " " x 30;
-        print substr($thing,0,30);
+        print substr($thing,0,15). " ";
         print join "\t", map {substr($row->get_column($_)." " x 5,0,5)} 
           qw/total_points c controversy/;
         print "\n";
