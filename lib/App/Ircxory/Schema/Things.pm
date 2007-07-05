@@ -150,7 +150,7 @@ sub most_controversial :ResultSet {
 sub least_controversial :ResultSet {
     my $self  = shift;
     my $count = shift;
-    my $algo = 'COUNT(1)/(ABS(SUM(points))+1)-COUNT(1)';
+    my $algo = 'ABS(SUM(points))/(COUNT(1)+0.1)';
     $self->_controversial($count, $algo, 'ASC');
 }
 
