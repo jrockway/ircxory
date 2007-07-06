@@ -25,6 +25,7 @@ requires 'Catalyst::Controller::BindLex';
 build_requires 'Test::More';
 build_requires 'ok';
 build_requires 'Test::Exception';
+build_requires 'Directory::Scratch';
 
 auto_install;
 WriteAll;
