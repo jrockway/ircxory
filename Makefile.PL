@@ -4,7 +4,7 @@ name 'App-Ircxory';
 all_from 'lib/App/Ircxory.pm';
 
 requires 'POE::Component::IRC';
-requires 'Catalyst::Runtime' => 5.7008;
+requires 'Catalyst::Runtime' => 5.7007;
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::Action::RenderView';
