@@ -26,6 +26,7 @@ build_requires 'Test::More';
 build_requires 'ok';
 build_requires 'Test::Exception';
 build_requires 'Directory::Scratch';
+build_requires 'SQL::Translator'; # ->deploy
 
 auto_install;
 WriteAll;
