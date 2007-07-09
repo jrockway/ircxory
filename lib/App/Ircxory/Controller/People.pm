@@ -10,14 +10,11 @@ use base 'Catalyst::Controller::BindLex';
 sub everyone :Path :Args(0) {
     my ($self, $c) = @_;
     my $people :Stashed = $c->model('DBIC::People');
-    $c->stash(template => 'people.tt2');
 }
 
 sub one_person :Path :Args(1) {
     my ($self, $c, $name) = @_;
     
-    $c->stash(template => 'person.tt2');
-
     # find who we're looking for
     my $person :Stashed = $c->model('DBIC::People')->
       find($name, {key => 'nickname'});
