@@ -21,8 +21,13 @@ template main => sub {
         pair( title       => 'By Controversy',
               left_title  => 'Ten Most Controversial Things',
               right_title => 'Ten Least Controversial Things',
-              left       => sub { list_things(c->stash->{most_controversial})},
-              right      => sub { list_things(c->stash->{least_controversial})},
+
+              left  => sub { 
+                  controversy_list_things(c->stash->{most_controversial})
+              },
+              right => sub { 
+                  controversy_list_things(c->stash->{least_controversial})
+              }
             );
 
         # information
