@@ -12,12 +12,13 @@ BEGIN {
 use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 use App::Ircxory::View::TD::Things;
+use App::Ircxory::View::TD::Pair;
 
 sub person(&) {
     my $person = shift->();
     a {
         attr { class => 'person',
-               href  => uri_for '/person', $person
+               href  => uri_for '/people', $person
            };
         $person
     };
@@ -29,8 +30,8 @@ template 'people/one_person' => sub {
         pair( title       => $person->name . q"'s Notables",
               left_title  => 'Ten favorite things',
               right_title => 'Ten favorite things to hate',
-              left        => list_things(c->stash->{high}),
-              right       => list_things(c->stash->{low}),
+              left        => sub { list_things(c->stash->{high}) },
+              right       => sub { list_things(c->stash->{low})  },
             );
         table {
             row {

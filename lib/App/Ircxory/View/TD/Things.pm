@@ -66,7 +66,8 @@ sub list_reasons {
                          $opinion->reason;
                      };
                   span { attr { class => 'written_by' };
-                         person(sub { $opinion->person });
+                         use Data::Dumper;
+                         person(sub{ $opinion->person });
                      };
               };
           };
@@ -106,7 +107,7 @@ template 'things/one_thing' => sub {
         };
         if (c->stash->{person}) {
             p {
-                person { c->stash->{person}->name };
+                person(sub { c->stash->{person}->name });
                 outs(' is also a person!');
             };
         }
