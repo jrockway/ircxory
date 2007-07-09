@@ -12,6 +12,8 @@ __PACKAGE__->config({ default_view => qr/App::Ircxory::View::TD$/,
                       name         => 'Ircxory',
                     });
 
+__PACKAGE__->config->{authentication}{openid} = { use_session => 1 };
+
 __PACKAGE__->config->{session} =
   {
    dbic_class     => 'DBIC::Session',
