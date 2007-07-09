@@ -1,7 +1,0 @@
-[% WRAPPER wrapper.tt2 %]
-<h2>Every Thing</h2>
-[% PROCESS thing_macros.tt2 %]
-[% FOREACH row = everything %]
-<p>[% thing(row.thing) %] [% score(row.total_points) %]</p>
-[% END %]
-[% END %]

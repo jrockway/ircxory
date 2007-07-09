@@ -1,9 +1,0 @@
-[% WRAPPER wrapper.tt2 %]
-[% PROCESS thing_macros.tt2 %]
-<h2>Everyone</h2>
-<ul>
-[% WHILE (the_person = people.next) %]
-<li>[% person(the_person.name) %]</li>
-[% END %]
-</ul>
-[% END %]
