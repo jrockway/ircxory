@@ -4,13 +4,15 @@ package App::Ircxory::View::TD::Things;
 use strict;
 use warnings;
 
+BEGIN {
+    use base 'Exporter';
+    our @EXPORT = qw/list_things controversy_list_things thing score/;
+}
+
 use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 use App::Ircxory::View::TD::People;
 use App::Ircxory::View::TD::Pair;
-
-use base 'Exporter';
-our @EXPORT = qw/list_things controversy_list_things thing score/;
 
 sub thing(&) {
     my $thing = shift->();
@@ -64,7 +66,7 @@ sub list_reasons {
                          $opinion->reason;
                      };
                   span { attr { class => 'written_by' };
-                         person { $opinion->person };
+                         person(sub { $opinion->person });
                      };
               };
           };

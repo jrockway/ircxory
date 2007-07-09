@@ -1,10 +1,9 @@
 # Copyright (c) 2007 Jonathan Rockway <jrockway@cpan.org>
 
 package App::Ircxory::Controller::People;
+
 use strict;
 use warnings;
-
-
 use base 'Catalyst::Controller::BindLex';
 
 sub everyone :Path :Args(0) {
@@ -24,9 +23,7 @@ sub one_person :Path :Args(1) {
     # get nicknames
     my $nicknames :Stashed = $person->nicknames;
     my $nickids = [$nicknames->get_column('nid')->all];
-    my @cond    = ( { 'opinions.nid' => 
-                      { -in => $nickids },
-                    },
+    my @cond    = ( { 'opinions.nid' => { -in => $nickids } },
                     { join => 'opinions' }
                   );
     

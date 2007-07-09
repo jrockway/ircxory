@@ -4,12 +4,14 @@ package App::Ircxory::View::TD::People;
 use strict;
 use warnings;
 
+BEGIN {
+    use base 'Exporter';
+    our @EXPORT = qw/person/;
+}
+
 use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 use App::Ircxory::View::TD::Things;
-
-use base 'Exporter';
-our @EXPORT = qw/person/;
 
 sub person(&) {
     my $person = shift->();
