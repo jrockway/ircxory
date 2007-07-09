@@ -81,3 +81,13 @@ a.thing {
     font-weight: bold;
     border: 1px solid #99ff99;
 }
+
+#logged_in_as {
+    position: absolute;
+    top: 1px;
+    right: 0px;
+    padding: 1em;
+    margin-top: .5em;
+    float: right;
+    align: right;
+}
