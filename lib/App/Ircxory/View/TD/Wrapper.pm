@@ -17,7 +17,7 @@ sub uri_for($;@) {
 sub wrapper(&) {
     my $content = shift;
     smart_tag_wrapper {
-        outs_raw(q{<?xml version="1.0" encoding="utf-8"?>});
+        outs_raw(qq{<?xml version="1.0" encoding="utf-8"?>\n});
         outs_raw(q{<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
                       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">});
         html {
@@ -36,6 +36,15 @@ sub wrapper(&) {
                         'Ircxory';
                     }
                 };
+
+                # message/error at top of each page
+                for (qw/message error/) {
+                    div {
+                        attr { id => $_, class => 'infobox' };
+                        c->stash->{$_};
+                    } if c->stash->{$_};
+                };
+                
                 $content->();
                 div {
                     attr { id => 'logos' };
