@@ -12,13 +12,12 @@ __PACKAGE__->config({ default_view => qr/App::Ircxory::View::TD$/,
                       name         => 'Ircxory',
                     });
 
-__PACKAGE__->config(
-                    session => {
-                                dbic_class     => 'DBIC::Session',
-                                expires        => 3600,
-                                flash_to_stash => 1,
-                               },
-                   );
+__PACKAGE__->config->{session} =
+  {
+   dbic_class     => 'DBIC::Session',
+   expires        => 3600,
+   flash_to_stash => 1,
+  };
 
 __PACKAGE__->setup;
 
