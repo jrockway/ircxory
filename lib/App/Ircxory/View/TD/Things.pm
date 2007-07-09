@@ -8,7 +8,7 @@ use App::Ircxory::View::TD::People;
 use App::Ircxory::View::TD::Pair;
 
 use base 'Exporter';
-our @EXPORT = qw/list_things thing score/;
+our @EXPORT = qw/list_things controversy_list_things thing score/;
 
 sub thing(&) {
     my $thing = shift->();
@@ -41,12 +41,8 @@ sub controversy_list_things($) {
         while (my $thing = $things->next) {
             li { # thing 42 (+43,-1)
                 thing { $thing->thing };
-                score { $thing->total_points };
-                outs('(');
                 score { $thing->ups };
-                outs(',');
-                score { $thing->downs };
-                outs(')');
+                score { -$thing->downs };
             }
         }
     }
@@ -72,6 +68,18 @@ sub list_reasons {
           };
     }
 }
+
+template 'things/all_things' => sub {
+    wrapper {
+        h2 { 'Every thing' };
+        ul {
+            while (my $row = c->stash->{everything}->next) {
+                thing { $row->thing };
+                score { $row->total_points };
+            }
+        }
+    }
+};
 
 template 'things/one_thing' => sub {
     my $thing  = c->stash->{thing};
