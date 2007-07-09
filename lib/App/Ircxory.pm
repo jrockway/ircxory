@@ -2,12 +2,23 @@ package App::Ircxory;
 
 use warnings;
 use strict;
-use Catalyst qw(Static::Simple ConfigLoader Unicode);
+use Catalyst qw(Static::Simple ConfigLoader Unicode
+                Session Session::Store::DBIC Session::State::Cookie
+                Authentication Authentication::Credential::OpenID
+              );
 
 our $VERSION = '0.01';
 __PACKAGE__->config({ default_view => qr/App::Ircxory::View::TD$/,
                       name         => 'Ircxory',
                     });
+
+__PACKAGE__->config(
+                    session => {
+                                dbic_class => 'DBIC::Session',
+                                expires    => 3600,
+                               },
+                   );
+
 __PACKAGE__->setup;
 
 =head1 NAME
