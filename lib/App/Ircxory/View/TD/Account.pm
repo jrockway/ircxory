@@ -6,8 +6,6 @@ use warnings;
 use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 
-Template::Declare::Tags::install_tag('form');
-
 sub form(&) {
     my $content = shift;
     smart_tag_wrapper {
