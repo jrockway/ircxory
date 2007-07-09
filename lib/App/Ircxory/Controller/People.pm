@@ -29,8 +29,8 @@ sub one_person :Path :Args(1) {
     
     # and do the search for things' scores
     my $t = $c->model('DBIC::Things');
-    my @high :Stashed = $t->highest_rated->search(@cond);
-    my @low  :Stashed = $t->lowest_rated->search(@cond);
+    my $high :Stashed = $t->highest_rated->search(@cond);
+    my $low  :Stashed = $t->lowest_rated->search(@cond);
 }
 
 1;
