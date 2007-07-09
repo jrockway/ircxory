@@ -4,6 +4,7 @@ package App::Ircxory::View::TD::Errors;
 use strict;
 use warnings;
 
+use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 
 template 'error_404' => sub {

@@ -3,6 +3,8 @@
 package App::Ircxory::View::TD::Things;
 use strict;
 use warnings;
+
+use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 use App::Ircxory::View::TD::People;
 use App::Ircxory::View::TD::Pair;
