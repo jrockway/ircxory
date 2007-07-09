@@ -19,6 +19,7 @@ sub main : Path Args(0) {
               scalar $c->model('DBIC::Things')->most_controversial);
     $c->stash(least_controversial => 
               scalar $c->model('DBIC::Things')->least_controversial);
+    
 }
 
 sub error_404 :Private {
@@ -35,6 +36,9 @@ sub end : ActionClass(RenderView) {
     my ($self, $c) = @_;
     $c->response->content_type('application/xhtml+xml; charset=utf-8')
       if $c->response->content_type =~ /html/;
+    my $b = $c->response->body;
+    $b =~ s/^\s+//;
+    $c->response->body($b);
 }
 
 =head1 NAME

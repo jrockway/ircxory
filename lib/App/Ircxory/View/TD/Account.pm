@@ -6,16 +6,10 @@ use warnings;
 use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 
-sub form(&) {
+sub login_form(&) {
     my $content = shift;
     smart_tag_wrapper {
-        my $attrs = {@_};
-        my @pairs;
-        foreach (keys %{$attrs||{}}){
-            # XXX: XSS
-            push @pairs, qq{$_="}. $attrs->{$_}. q{"};
-        }
-        outs_raw('<form '. (join ' ', @pairs). '>');
+        outs_raw('<form method="POST" action="'. uri_for('/login'). '">');
         $content->();
         outs_raw('</form>');
     };
@@ -25,16 +19,12 @@ template 'account/login' => sub {
     wrapper {
         h2 { 'Log in' };
         p { '... with your OpenID' };
-        with (name   => 'login',
-              method => 'POST',
-              action => uri_for '/login',
-             ),
-        form {
+        login_form {
               input {
-                  attr { name  => 'openid',
+                  attr { name  => 'claimed_uri',
                          type  => 'text',
                          class => 'openid',
-                         };
+                     };
               };
             input { 
                 attr { type  => 'submit',
