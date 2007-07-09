@@ -7,10 +7,31 @@ use base 'Catalyst::Controller';
 
 sub login :Global :Args(0) {
     my ($self, $c) = @_;
+    my $openid = $c->req->params->{claimed_uri};
+    
+    if ($c->req->param != 0) {
+        if (!$openid && $c->req->params->{submit}) {
+            $c->stash(error => 'Please enter your OpenID.');
+            $c->detach;
+        };
+        
+        if (eval {$c->authenticate_openid} ) {
+            $c->flash->{message} = 
+              'Successfully logged in as '. $c->user->{display};
+            $c->res->redirect($c->uri_for('/'));
+        }
+        else {
+            $c->stash(error => 
+                      'You could not be authenticated with that OpenID.');
+        }
+        
+        $c->detach;
+    };
 };
 
 sub logout :Global :Args(0) {
     my ($self, $c) = @_;
+    $c->logout;
 }
 
 1;
