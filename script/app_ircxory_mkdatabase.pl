@@ -6,10 +6,10 @@ use warnings;
 
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
-use App::Ircxory::Robot::DBLogger;
+use App::Ircxory::Robot::Model;
 use App::Ircxory::Schema;
 
-my $schema = App::Ircxory::Robot::DBLogger->connect or die "Failed to connect";
+my $schema = App::Ircxory::Robot::Model->connect or die "Failed to connect";
 $schema->deploy;
 
 # person
