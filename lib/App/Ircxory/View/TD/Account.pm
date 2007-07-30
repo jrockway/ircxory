@@ -6,34 +6,25 @@ use warnings;
 use Template::Declare::Tags;
 use App::Ircxory::View::TD::Wrapper;
 
-sub login_form(&) {
-    my $content = shift;
-    smart_tag_wrapper {
-        form { 
-            attr { method => 'post',
-                   action => uri_for('/login'),
-               };
-            $content->();
-        }
-    };
-}
-
 template 'account/login' => sub {
     wrapper {
         h2 { 'Log in' };
         p { '... with your OpenID' };
-        login_form {
-              input {
-                  attr { name  => 'claimed_uri',
-                         type  => 'text',
-                         class => 'openid',
-                     };
+        form {
+            attr { method => 'post',
+                   action => uri_for('/login'),
+            };
+            input {
+                attr { name  => 'claimed_uri',
+                       type  => 'text',
+                       class => 'openid',
+                };
               };
             input { 
                 attr { type  => 'submit',
-                         name  => 'submit', 
-                           value => 'Log in',
-                       };
+                       name  => 'submit', 
+                       value => 'Log in',
+                };
             }
         }
     }
