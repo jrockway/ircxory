@@ -9,9 +9,12 @@ use App::Ircxory::View::TD::Wrapper;
 sub login_form(&) {
     my $content = shift;
     smart_tag_wrapper {
-        outs_raw('<form method="POST" action="'. uri_for('/login'). '">');
-        $content->();
-        outs_raw('</form>');
+        form { 
+            attr { method => 'post',
+                   action => uri_for('/login'),
+               };
+            $content->();
+        }
     };
 }
 
