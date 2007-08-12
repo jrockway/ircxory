@@ -11,7 +11,9 @@ __PACKAGE__->load_components("PK::Auto", "Core");
 __PACKAGE__->table("nicknames");
 __PACKAGE__->add_columns(
   "nid",
-  { data_type => "INTEGER", is_nullable => 0, size => undef },
+  { data_type => "INTEGER", is_nullable => 0, size => undef,
+    is_auto_increment => 1,
+  },
   "pid",
   { data_type => "INTEGER", is_nullable => 1, size => undef },
   "nick",

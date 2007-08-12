@@ -10,7 +10,9 @@ __PACKAGE__->load_components("ResultSetManager", "PK::Auto", "Core");
 __PACKAGE__->table("opinions");
 __PACKAGE__->add_columns(
   "oid",
-  { data_type => "INTEGER", is_nullable => 0, size => undef },
+  { data_type => "INTEGER", is_nullable => 0, size => undef,
+    is_auto_increment => 1,
+  },
   "nid",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
   "cid",

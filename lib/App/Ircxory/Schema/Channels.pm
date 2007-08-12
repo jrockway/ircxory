@@ -11,7 +11,9 @@ __PACKAGE__->load_components("PK::Auto", "Core");
 __PACKAGE__->table("channels");
 __PACKAGE__->add_columns(
   "cid",
-  { data_type => "INTEGER", is_nullable => 0, size => undef },
+  { data_type => "INTEGER", is_nullable => 0, size => undef,
+    is_auto_increment => 1,
+  },
   "channel",
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
