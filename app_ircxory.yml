@@ -13,4 +13,4 @@ bot:
     - "#yapc"
 Model::DBIC:
   connect_info:
-    - "DBI:SQLite:/tmp/test.db"
+    - "DBI:SQLite:root/database"
