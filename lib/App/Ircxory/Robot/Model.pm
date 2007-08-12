@@ -30,7 +30,7 @@ Connect to the DBIC schema (using the app config file for the DSN)
 sub connect {
     my $invocant = shift;
     my $conf = App::Ircxory::Config->load || croak 'Failed to load config';
-    my ($dsn, $user, $pass, $args) = @{$conf->{'Model::DBIC'}||[]};
+    my ($dsn, $user, $pass, $args) = @{$conf->{'Model::DBIC'}{connect_info}||[]};
     
     return $invocant->SUPER::connect($dsn, $user, $pass, $args);
 }

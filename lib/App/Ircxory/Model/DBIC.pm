@@ -4,10 +4,6 @@ use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 __PACKAGE__->config(
     schema_class => 'App::Ircxory::Schema',
-    connect_info => [
-        'DBI:SQLite:root/database',
-        
-    ],
 );
 
 sub ACCEPT_CONTEXT {

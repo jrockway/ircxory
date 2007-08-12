@@ -1,7 +1,7 @@
 ---
 bot:
   nick: spybot
-  server: irc.perl.org
+  server: cou.ch
   channels:
     - "#chicago.pm"
     - "#catalyst"
@@ -10,5 +10,7 @@ bot:
     - "#killtrac"
     - "#dbix-class"
     - "#angerwhale"
+    - "#yapc"
 Model::DBIC:
-  - "DBI:SQLite:root/database"
+  connect_info:
+    - "DBI:SQLite:/tmp/test.db"
