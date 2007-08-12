@@ -10,6 +10,8 @@ use App::Ircxory::Robot::Model;
 use App::Ircxory::Schema;
 
 my $schema = App::Ircxory::Robot::Model->connect or die "Failed to connect";
+
+$schema->txn_do(sub {
 $schema->deploy;
 
 # person
@@ -38,6 +40,8 @@ my $opinion = rs('Opinions')->  create({ nickname => $nick,
                                        });
 
 print "Created first opinion with id ". $opinion->id. "\n";
+
+});
 
 sub rs {
     return $schema->resultset($_[0]);
