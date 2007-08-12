@@ -12,7 +12,9 @@ __PACKAGE__->load_components("ResultSetManager", "PK::Auto", "Core");
 __PACKAGE__->table("things");
 __PACKAGE__->add_columns(
   "tid",
-  { data_type => "INTEGER", is_nullable => 0, size => undef },
+  { data_type => "INTEGER", is_nullable => 0, size => undef,
+    is_auto_increment => 1,
+  },
   "thing",
   { data_type => "TEXT", is_nullable => 0, size => undef },
 );
