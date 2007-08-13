@@ -15,7 +15,7 @@ requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::DBIC';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Authentication';
-requires 'Catalyst::Plugin::Authentication::Credential::OpenID';
+requires 'Catalyst::Plugin::Authentication::Credential::OpenID' => '0.03';
 requires 'DBD::SQLite';
 requires 'Log::Log4perl';
 requires 'Class::Accessor';

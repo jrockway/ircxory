@@ -15,14 +15,18 @@ sub login :Global :Args(0) {
             $c->detach;
         };
         
-        if (eval {$c->authenticate_openid} ) {
+        if (eval {$c->authenticate} ) {
             $c->flash->{message} = 
               'Successfully logged in as '. $c->user->{display};
             $c->res->redirect($c->uri_for('/'));
         }
         else {
+            $c->log->debug("failed login for ". 
+                           $c->req->params->{claimed_uri}. ": $@")
+              if $c->debug;
+            
             $c->stash(error => 
-                      'You could not be authenticated with that OpenID.');
+                      'You could not be authenticated with that OpenID');
         }
         
         $c->detach;

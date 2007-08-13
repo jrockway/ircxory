@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use Catalyst qw(Static::Simple ConfigLoader Unicode
                 Session Session::Store::DBIC Session::State::Cookie
-                Authentication Authentication::Credential::OpenID
+                Authentication
               );
 
 our $VERSION = '0.01';
@@ -12,7 +12,26 @@ __PACKAGE__->config({ default_view => qr/App::Ircxory::View::TD$/,
                       name         => 'Ircxory',
                     });
 
-__PACKAGE__->config->{authentication}{openid} = { use_session => 1 };
+__PACKAGE__->config->{authentication} = 
+ {  
+  default_realm => 'openid',
+  realms => {
+             openid => {
+                         credential => {
+                                        class => 'OpenID',
+                                        use_session => 1,
+                                       },
+                        store => {
+                                  class => 'Minimal',
+                                  users => {
+                                            'http://jrock.us/' => {
+                                            display => 'Jonathan Rockway',
+                                                                  },
+                                           },
+                                 }
+                       }
+            }
+ };
 
 __PACKAGE__->config->{session} =
   {

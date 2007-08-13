@@ -9,13 +9,20 @@ use App::Ircxory::View::TD::Wrapper;
 template 'account/login' => sub {
     wrapper {
         h2 { 'Log in' };
-        p { '... with your OpenID' };
+        p {
+            'Enter your OpenID URL, host name, or i-name to log in.'
+        };
         form {
             attr { method => 'post',
                    action => uri_for('/login'),
             };
+            label {
+                attr { for => 'claimed_uri' };
+                'OpenID'
+            };
             input {
-                attr { name  => 'claimed_uri',
+                attr { id    => 'claimed_uri',
+                       name  => 'claimed_uri',
                        type  => 'text',
                        class => 'openid',
                 };

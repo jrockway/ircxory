@@ -91,3 +91,10 @@ a.thing {
     float: right;
     align: right;
 }
+
+.openid {   
+   background: url(openid-14x14.png) no-repeat;
+   background-color: #fff;
+   background-position: 0 50%;
+   padding-left: 18px;
+}

@@ -53,7 +53,7 @@ sub wrapper(&) {
                             c->user->{display}
                         };
                     }
-                    else {
+                    elsif (c->action ne 'account/login') {
                         a {
                             attr { href => uri_for '/login' };
                             'Log in';
