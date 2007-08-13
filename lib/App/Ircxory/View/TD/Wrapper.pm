@@ -29,6 +29,12 @@ sub wrapper(&) {
                            href => uri_for '/static/main.css',
                        }
                 }; 
+                link {
+                    attr { rel  => 'alternate',
+                           type => 'application/atom+xml',
+                           href => uri_for '/feeds/actions.xml',
+                       }
+                };
             };
             body {
                 h1 { 
