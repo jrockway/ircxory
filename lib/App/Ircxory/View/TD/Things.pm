@@ -111,7 +111,7 @@ template 'things/one_thing' => sub {
                 outs(' is also a person!');
             };
         }
-
+        
         pair( left_title  => "Reasons why $thing is loved",
               right_title => "Reasons why $thing is hated",
               left        => sub { list_reasons(c->stash->{up_reasons}) },
@@ -126,8 +126,8 @@ template 'things/one_thing' => sub {
                     if ($neutral_reasons->[0]) {
                         h3 {
                             outs("Reasons why $thing is meh");
-                            list_reasons($neutral_reasons);
-                        }
+                        };
+                        list_reasons($neutral_reasons);
                     }
                 }
           };
