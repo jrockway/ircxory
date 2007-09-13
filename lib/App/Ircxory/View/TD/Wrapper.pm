@@ -21,7 +21,7 @@ sub wrapper(&) {
         outs_raw(q{<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
                       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">});
         html {
-            attr { xmlns => 'http://w3.org/1999/xhtml' };
+            attr { xmlns => 'http://www.w3.org/1999/xhtml' };
             head {
                 title { c->stash->{title} || c->config->{name} || 'Ircxory' };
                 link {
