@@ -43,24 +43,6 @@ sub wrapper(&) {
                     }
                 };
 
-                # info about logged in user
-                div { 
-                    attr { id => 'logged_in_as' };
-                    if (c->user_exists) {
-                        outs('Logged in as ');
-                        a { 
-                            attr { href => c->user->{url} };
-                            c->user->{display}
-                        };
-                    }
-                    elsif (c->action ne 'account/login') {
-                        a {
-                            attr { href => uri_for '/login' };
-                            'Log in';
-                        }
-                    }
-                };
-                  
                 # message/error at top of each page
                 for (qw/message error/) {
                     div {
