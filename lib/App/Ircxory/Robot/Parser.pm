@@ -132,10 +132,7 @@ sub _parse_karma {
           $reason = '' if !defined $reason; # fix in perl5.10 //
 
           # trim
-          $word   =~ s/^\s+//;
-          $word   =~ s/\s+$//;
-          $reason =~ s/^\s+//;
-          $reason =~ s/\s+$//;
+          s/(?:^\s+|\s+$)//g for ($word, $reason);
           
           # and finally return
           return App::Ircxory::Robot::Action->
