@@ -62,7 +62,7 @@ sub list_reasons {
 
     div { 
         attr { class => 'paired_thing_data' };
-        if (!$opinions_ref->[0] && !){
+        if (!$opinions_ref->[0]){
             p { 'None!' };
         }
         else {
