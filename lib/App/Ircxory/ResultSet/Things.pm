@@ -9,6 +9,9 @@ use base 'DBIx::Class::ResultSet';
 
 =head1 CUSTOM RESULTSETS
 
+These methods are used by the C<Things> object to provide "reports"
+based upon a resultset.
+
 =head2 reasons_for($thing)
 
 Return a resultset of opinions relating to C<$thing>.
@@ -95,8 +98,6 @@ sub lowest_rated {
 =head2 most_controversial
 
 Returns a ResultSet of Things ordered by "controversy".
-
-=cut
 
 =head2 least_controversial
 
