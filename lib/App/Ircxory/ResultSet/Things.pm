@@ -145,4 +145,29 @@ sub _controversial {
                     });
 }
 
+=head1 no_comment
+
+Returns a list of lists of people that didn't provide a reason
+for upmodding or downmodding something:
+
+  my ($up, $down) = $things_rs->no_comment;
+
+=cut
+
+sub no_comment {
+    my ($self) = @_;
+
+    return map { 
+        [ $self->search_related(opinions => { reason => [ { '=' => '' },
+                                                          \'IS NULL'
+                                                        ],
+                                              points => { $_ => 0 },
+                                            })
+          ->related_resultset('nickname')
+          ->search_related('person' => {}, { group_by => 'name' })
+          ->get_column('name')->all
+        ] 
+    } qw/> </;
+}
+
 1;
