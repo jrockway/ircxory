@@ -98,3 +98,9 @@ a.thing {
    background-position: 0 50%;
    padding-left: 18px;
 }
+
+.reasonless_voters {
+    font-size: .9em;
+    font-style: italic;
+    margin-top: 1em;
+}

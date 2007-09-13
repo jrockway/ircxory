@@ -39,7 +39,14 @@ sub one_thing :Path Args(1) {
     $c->stash(up_reasons      => \@up_r);
     $c->stash(down_reasons    => \@dn_r);
     $c->stash(neutral_reasons => \@nu_r);
-    
+
+    # reasonless voters
+    my ($ups, $downs) = 
+      $c->model('DBIC::Things')->
+        search({ thing => $thing })->
+          no_comment;
+    $c->stash('up_reasonless' => $ups);
+    $c->stash('down_reasonless' => $downs);
 }
 
 1;

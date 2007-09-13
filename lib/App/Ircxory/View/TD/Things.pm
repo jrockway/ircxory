@@ -14,6 +14,10 @@ use App::Ircxory::View::TD::Wrapper;
 use App::Ircxory::View::TD::People;
 use App::Ircxory::View::TD::Pair;
 
+my %EMOTION_FOR = ( up   => 'loved',
+                    down => 'hated',
+                  );
+
 sub thing(&) {
     my $thing = shift->();
     a { attr { class => 'thing', href => uri_for('/things', $thing)};
@@ -53,24 +57,43 @@ sub controversy_list_things($) {
 }
 
 sub list_reasons {
-    my $opinions_ref = shift;
-    if (!$opinions_ref->[0]){
-        p { 'None!' };
-        return;
-    }
+    my ($direction, $thing) = @_;
+    my $opinions_ref = c->stash->{"${direction}_reasons"};
 
-    foreach my $opinion (@$opinions_ref){
-        div { attr { class => 'reason' };
-              p {
-                  span { attr { class => 'opinion_reason' };
-                         $opinion->reason;
-                     };
-                  span { attr { class => 'written_by' };
-                         use Data::Dumper;
-                         person(sub{ $opinion->person });
-                     };
-              };
-          };
+    div { 
+        attr { class => 'paired_thing_data' };
+        if (!$opinions_ref->[0] && !){
+            p { 'None!' };
+        }
+        else {
+            # karma events with reasons
+            foreach my $opinion (@$opinions_ref){
+                div { 
+                    attr { class => 'reason' };
+                    p {
+                        span { 
+                            attr { class => 'opinion_reason' };
+                            $opinion->reason;
+                        };
+                        span { 
+                            attr { class => 'written_by' };
+                            person(sub{ $opinion->person });
+                        }
+                    }
+                }
+            }
+        }
+        
+        # list of people that karma'd without giving a reason
+        my @reasonless = @{c->stash->{"${direction}_reasonless"}||[]};
+        if (@reasonless) {
+            p {
+                attr { class => 'reasonless_voters' };
+                outs("The following people $EMOTION_FOR{$direction} ".
+                     "$thing for no reason: ");
+                person(sub{$_}) for @reasonless;
+            };
+        }
     }
 }
 
@@ -114,8 +137,8 @@ template 'things/one_thing' => sub {
         
         pair( left_title  => "Reasons why $thing is loved",
               right_title => "Reasons why $thing is hated",
-              left        => sub { list_reasons(c->stash->{up_reasons}) },
-              right       => sub { list_reasons(c->stash->{down_reasons}) },
+              left        => sub { list_reasons('up', $thing) },
+              right       => sub { list_reasons('down', $thing) },
               width       => '50em',
             );
         div { attr { class => 'pair', style => 'width: 50em' };
