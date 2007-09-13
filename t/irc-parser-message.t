@@ -51,6 +51,9 @@ my %OPINIONS = (
                 'Acme::Read::Like::A::Monger++' 
                 => mk_action('acme::read::like::a::monger', 1),
 
+                # websites
+                'search.cpan.org++' => mk_action('search.cpan.org', 1),
+                
                 # weird stuff
                 '++++' => undef,
                 '----' => undef,

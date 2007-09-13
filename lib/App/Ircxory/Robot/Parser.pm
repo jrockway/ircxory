@@ -111,7 +111,7 @@ sub _parse_karma {
     if ($what =~ /(?:                   # what we're voting on:
                       $parens           # something in parens
                       |                 #  -or-
-                      ([A-Za-z_:0-9]+)  # a single word++
+                      ([A-Za-z_:.0-9]+) # a single word++
                   )
                   ([+-]{2})             # the operation (inc or dec)
                   \s*                   # spaces, who cares
