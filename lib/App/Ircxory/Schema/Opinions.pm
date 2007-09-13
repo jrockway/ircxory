@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("ResultSetManager", "PK::Auto", "Core");
+__PACKAGE__->load_components("PK::Auto", "Core");
 __PACKAGE__->table("opinions");
 __PACKAGE__->add_columns(
   "oid",
