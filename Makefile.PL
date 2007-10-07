@@ -24,6 +24,7 @@ requires 'Carp';
 requires 'Catalyst::Controller::BindLex';
 requires 'XML::Feed';
 
+build_requires 'DBICx::TestDatabase';
 build_requires 'Test::More';
 build_requires 'ok';
 build_requires 'Test::Exception';

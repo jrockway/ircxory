@@ -8,7 +8,7 @@ use YAML;
 use App::Ircxory::Robot::Parser;
 use Regexp::Common qw/balanced/;
 
-use base 'App::Ircxory::Schema';
+use base qw(DBICx::TestDatabase::Subclass App::Ircxory::Schema);
 
 =head1 NAME
 
@@ -23,22 +23,9 @@ App::Ircxory::Test::Database - create and populate a test database
 
 =head1 METHODS
 
-=head2 new
+=head2 connect
 
 Connect to the database and deploy the schema.  Returns the schema.
-
-=cut
-
-sub connect {
-    my $class = shift;
-    # setup database
-    my $tmp = Directory::Scratch->new;
-    my $db  = $tmp->touch('database');
-    
-    my $schema = $class->SUPER::connect("DBI:SQLite:$db");
-    $schema->deploy;
-    return $schema;
-}
 
 =head2 populate(@_)
 
