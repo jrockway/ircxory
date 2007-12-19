@@ -19,5 +19,6 @@ $s->add_test_record(@$_) for
   );
 
 my ($ups, $downs) = $s->resultset('Things')->no_comment;
+
 is_deeply [sort @$ups], [sort qw/jrockway test/], 'got ups';
 is_deeply [sort @$downs], [sort qw/both/], 'got downs';

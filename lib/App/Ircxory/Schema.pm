@@ -65,21 +65,15 @@ be created.
 sub _get_nickname {
     my $self = shift;
     my ($nick, $user, $host) = @_;
-    
-    my $nickname = $self->resultset('Nicknames')->
-      find_or_create({ nick     => $nick, 
-                       username => $user,
-                       host     => $host,
-                     });
 
-    my $person = $nickname->person;
-    if (!$person) {
-        # TODO: be smarter about hostmasks etc.
-        my $person = $self->resultset('People')->
-          find_or_create({ name => $nick });
-        $nickname->person($person);
-        $nickname->update;
-    }
+    my $person = $self->resultset('People')->find_or_create({ name => $nick });
+    my $nickname = $self->resultset('Nicknames')->
+      find_or_create({ 
+          nick     => $nick, 
+          username => $user,
+          host     => $host,
+          person   => $person,
+      });
     
     return $nickname;
 }
