@@ -4,7 +4,7 @@ package App::Ircxory::View::TD::Pair;
 use strict;
 use warnings;
 
-use Template::Declare::Tags;
+use Template::Declare::Tags qw(HTML);
 
 use base 'Exporter';
 our @EXPORT = qw/pair/;
